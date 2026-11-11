@@ -1,0 +1,1613 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Syfx Web Library – salin, tampal, siap</title>
+<meta name="theme-color" content="#d6f23f">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232fd16b'/%3E%3Cstop offset='1' stop-color='%23f7e93c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='41' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='24' text-anchor='middle' fill='%230a0a0a'%3ESWL%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#d6f23f;--ink:#0a0a0a;--mut:#454d36;--card:#fff;--line:#e6ebd2;--acc:#0a0a0a;--hl:#d6f23f;--code:#0a0a0a;--codeink:#e8efd0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cdefs%3E%3Cg id='m'%3E%3Cpath d='M0 30A30 30 0 0 1 30 0' fill='none' stroke='%23000' stroke-opacity='.04' stroke-width='11' stroke-linecap='round'/%3E%3Cpath d='M0 30A30 30 0 0 1 30 0' fill='none' stroke='%23fff' stroke-opacity='.15' stroke-width='3' stroke-linecap='round'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23m' transform='translate(38 40) rotate(20) translate(-15 -15)'/%3E%3Cuse href='%23m' transform='translate(118 38) rotate(150) translate(-15 -15)'/%3E%3Cuse href='%23m' transform='translate(82 114) rotate(260) translate(-15 -15)'/%3E%3Cuse href='%23m' transform='translate(34 120) rotate(-50) translate(-15 -15)'/%3E%3C/svg%3E") 0 0/160px 160px;color:var(--ink);font-family:Urbanist,system-ui,sans-serif;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:clamp(3.2rem,13vw,6.4rem);line-height:.95;margin:6px 0 18px;font-weight:800;letter-spacing:-.04em}
+.lead{max-width:56ch;color:var(--mut);margin:0 0 22px;font-size:1.05rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{border:0;background:var(--card);color:var(--ink);padding:10px 18px;border-radius:99px;font:inherit;font-size:.95rem;font-weight:700;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip:focus-visible,.tab:focus-visible,.copy:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.item{background:var(--card);border:0;border-radius:28px;margin-bottom:22px;overflow:hidden}
+.item header{padding:18px 20px 6px}
+.item h2{margin:0;font-size:1.35rem}
+.item header p{margin:4px 0 0;color:var(--mut);max-width:70ch}
+.item header p.use{margin-top:10px;color:var(--ink);background:var(--bg);padding:9px 12px;border-radius:9px}
+.lvl{display:inline-block;background:var(--hl);color:#0a0a0a;font-size:.8rem;font-weight:700;padding:2px 11px;border-radius:99px;margin-left:8px;vertical-align:middle}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.prev{margin:12px 0 0;padding:0 14px 14px}
+.prev iframe{width:100%;height:340px;border:0;display:block;border-radius:20px;background:#f3f6e4}
+.codebox{background:var(--code);color:var(--codeink);display:flex;flex-direction:column;min-width:0;margin:0 14px 14px;border-radius:20px;overflow:hidden}
+@media(min-width:821px){.codebox{margin:12px 14px 14px 0}}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px 10px;border-bottom:1px solid #262626}
+.tab{background:none;border:0;color:#9a9a9a;font:inherit;font-size:.9rem;padding:6px 12px;border-radius:7px;cursor:pointer}
+.tab[aria-selected="true"]{background:#d6f23f;color:#0a0a0a}
+.sp{flex:1}
+.copy{display:flex;align-items:center;gap:6px;background:#d6f23f;color:#0a0a0a;border:0;border-radius:8px;padding:7px 12px;font:inherit;font-size:.88rem;font-weight:600;cursor:pointer}
+.copy.all{white-space:nowrap;background:transparent;border:1.5px solid #3a3a3a;color:var(--codeink)}
+.copy svg{width:15px;height:15px}
+.copy.ok{background:#1fa971;border-color:#1fa971;color:#fff}
+pre{margin:0;padding:14px 16px;overflow:auto;height:292px;font:400 .82rem/1.6 "Fira Code",ui-monospace,monospace;tab-size:2}
+.steps{padding:16px 22px 20px;border-top:1.5px solid var(--line)}
+.steps h3{margin:0 0 6px;font-size:1rem}
+.steps ol{margin:0;padding-left:20px;color:var(--mut)}
+.steps li{margin:3px 0}
+.steps code{font-family:"Fira Code",monospace;font-size:.85em;background:var(--bg);padding:1px 6px;border-radius:5px;color:var(--ink)}
+footer{margin-top:34px;background:#0a0a0a;color:#e8efd0;border-radius:28px;padding:26px 22px 20px}
+.ft-top{display:flex;align-items:center;gap:14px}
+.ft-top svg{flex:none;width:46px;height:46px}
+.ft-top b{display:block;font-size:1.35rem;color:#d6f23f;letter-spacing:-.02em;line-height:1.1}
+.ft-top span{font-size:.92rem;opacity:.75}
+.ft-bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 18px;margin-top:20px;padding-top:16px;border-top:1px solid #262626;font-size:.88rem;color:#9a9a9a}
+.ft-bot b{color:#fff;font-weight:600}
+.cat{display:flex;align-items:center;gap:10px;margin:38px 0 14px;font-size:clamp(1.7rem,5.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1}
+.sec:first-child .cat{margin-top:6px}
+.cat span{font-size:.9rem;font-weight:700;background:#0a0a0a;color:#d6f23f;border-radius:99px;padding:3px 12px;letter-spacing:0}
+.chip small{opacity:.55;font-weight:700;font-size:.8em;margin-left:2px}
+.tab.tg{display:none;color:#d6f23f}
+@media(max-width:820px){.tab.tg{display:inline-block}.codebox pre{display:none}.item.open .codebox pre{display:block}}
+.codebox :focus-visible{outline-color:#d6f23f}
+.ticks{list-style:none;margin:0 0 26px;padding:0;display:grid;gap:12px}
+.ticks li{display:flex;align-items:center;gap:12px;font-size:clamp(1.1rem,3.6vw,1.45rem);font-weight:700}
+.ticks li::before{content:"";flex:none;width:34px;height:34px;border-radius:10px;box-shadow:0 0 0 1.5px var(--line);background:#0a0a0a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3.2L15 6.8' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat}
+.badge{display:flex;align-items:center;gap:12px;margin:0 0 30px}
+.bi{display:grid;place-items:center;flex:none;width:64px;height:64px;border-radius:20px;background:#fff;color:#0a0a0a;font:500 1.05rem "Fira Code",monospace}
+.pill{display:flex;align-items:baseline;gap:2px;background:#fff;color:#0a0a0a;border-radius:99px;padding:12px 26px}
+.pill b{font-size:clamp(2rem,7vw,3rem);line-height:1;font-weight:800;letter-spacing:-.03em}
+.pill span{font-size:1.15rem;font-weight:600;margin-left:8px}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Syfx Web<br>Library</h1>
+  <p class="lead">Pilih komponen, tengok hasilnya bergerak, tekan butang salin, tampal dalam projek kau. Setiap satu ada arahan guna yang ringkas. Cari komen <b>UBAH:</b> dalam kod untuk tahu bahagian mana perlu kau laraskan.</p>
+  <ul class="ticks">
+    <li>Salin dan tampal terus</li>
+    <li>Tanpa library luar</li>
+    <li>Responsif di telefon</li>
+    <li>Siap arahan guna</li>
+  </ul>
+  <div class="badge">
+    <span class="bi">&lt;/&gt;</span>
+    <div class="pill"><b id="cnt">24</b><b>+</b><span>Komponen</span></div>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Tapis kategori"></div>
+  <div id="list"></div>
+  <footer>
+    <div class="ft-top">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2fd16b"/><stop offset="1" stop-color="#f7e93c"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#fg)"/><text x="32" y="41" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="24" text-anchor="middle" fill="#0a0a0a">SWL</text></svg>
+      <div><b>Syfx Web Library</b><span>Semua kod boleh guna bebas, tanpa library luar.</span></div>
+    </div>
+    <div class="ft-bot">
+      <span>&copy; <span id="yr">2026</span> Syfx Web Library. Hak cipta terpelihara.</span>
+      <span>Design by <b>Muhammad Syafiq</b></span>
+    </div>
+  </footer>
+</div>
+<script>
+var C=[
+{cat:"Asas",lvl:"Asas",title:"Susun atur bento guna div",use:"Halaman utama portfolio, dashboard atau halaman ciri produk, bila nak susun beberapa kotak maklumat dengan saiz berbeza.",desc:"Kebanyakan layout web moden ialah div yang disusun dengan CSS grid. Setiap blok boleh makan lebih satu lajur atau baris.",
+html:`<div class="bento">
+  <div class="b big">Utama</div> <!-- UBAH: tukar teks; salin baris untuk tambah blok -->
+  <div class="b">Pelajar<strong>128</strong></div>
+  <div class="b dark">Mod gelap</div>
+  <div class="b wide">Blok lebar dua lajur</div>
+  <div class="b">Kecil</div>
+</div>`,
+css:`.bento{display:grid;grid-template-columns:repeat(3,1fr); /* UBAH: bilangan lajur */ grid-auto-rows:80px; /* UBAH: tinggi setiap baris */
+  gap:10px;width:min(92%,380px);font-family:system-ui,sans-serif}
+.b{border-radius:16px;padding:12px;background:#e7ecff; /* UBAH: warna blok biasa */ display:flex;
+  flex-direction:column;justify-content:space-between;font-weight:600;
+  transition:transform .2s}
+.b:hover{transform:scale(1.04)}
+.b strong{font-size:1.8rem}
+.big{grid-column:span 2;grid-row:span 2; /* UBAH: span = berapa lajur atau baris dimakan blok */ background:#3b5bff;color:#fff;font-size:1.3rem}
+.dark{background:#101828;color:#fff}
+.wide{grid-column:span 2;background:#ffe45c}`,
+js:"",
+steps:["Salin HTML ke dalam <code>&lt;body&gt;</code> dan CSS ke <code>&lt;style&gt;</code>.","Ubah saiz blok dengan <code>grid-column:span N</code> dan <code>grid-row:span N</code>.","Untuk skrin kecil, tukar <code>repeat(3,1fr)</code> kepada <code>repeat(2,1fr)</code> dalam <code>@media</code>."]},
+
+{cat:"Susun atur",lvl:"Asas",title:"Navbar guna flexbox",use:"Bahagian atas hampir semua laman web: logo di kiri, menu dan butang di kanan.",desc:"Flexbox susun elemen dalam satu baris. Baris CSS yang penting sudah diberi komen.",
+html:`<nav class="nav">
+  <b>Studio</b> <!-- UBAH: nama atau logo kau -->
+  <a href="#" class="push">Karya</a> <!-- UBAH: tukar teks dan href -->
+  <a href="#">Kursus</a>
+  <button>Daftar</button> <!-- UBAH: teks butang -->
+</nav>`,
+css:`.nav{
+  display:flex;         /* susun semua anak dalam satu baris */
+  align-items:center;   /* sejajarkan di tengah secara menegak */
+  gap:14px;             /* jarak antara setiap item */
+  flex-wrap:wrap;       /* turun baris baru kalau skrin sempit */
+  box-sizing:border-box;
+  width:min(94%,360px); /* UBAH: lebar maksimum */ padding:10px 14px;background:#fff;
+  border:2px solid #101828;border-radius:14px;font-family:system-ui,sans-serif}
+.push{margin-left:auto} /* tolak item ini dan yang selepasnya ke kanan */
+.nav a{color:#101828;text-decoration:none;font-weight:600;font-size:.92rem}
+.nav a:hover{color:#3b5bff}
+.nav button{background:#3b5bff;color:#fff; /* UBAH: warna butang */ border:0;border-radius:9px;
+  padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}`,
+js:"",
+steps:["Salin HTML dan CSS ke projek.","Tiga baris pertama dalam <code>.nav</code> yang buat kerja utama: <code>display:flex</code>, <code>align-items</code> dan <code>gap</code>.","Nak pautan duduk di kanan? Letak class <code>push</code> pada pautan pertama."]},
+
+{cat:"Susun atur",lvl:"Pertengahan",title:"Grid responsif auto-susun",use:"Galeri gambar, senarai produk atau kad kursus yang mesti muat elok di telefon dan komputer.",desc:"Satu baris CSS sahaja. Bilangan lajur berubah sendiri ikut lebar skrin, tanpa media query.",
+html:`<div class="gal">
+  <div>1</div><div>2</div><div>3</div> <!-- UBAH: ganti dengan gambar atau kandungan; salin untuk tambah -->
+  <div>4</div><div>5</div><div>6</div>
+</div>`,
+css:`.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); /* UBAH: 90px = saiz minimum setiap kotak */
+  gap:10px;width:min(94%,430px);font-family:system-ui,sans-serif}
+.gal div{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;
+  color:#fff;font-weight:700;font-size:1.4rem}
+.gal div:nth-child(1){background:#ff7a59} /* UBAH: warna setiap kotak (nth-child 1 hingga 6) */
+.gal div:nth-child(2){background:#ffb84d}
+.gal div:nth-child(3){background:#38c59a}
+.gal div:nth-child(4){background:#3b9eff}
+.gal div:nth-child(5){background:#8a6bff}
+.gal div:nth-child(6){background:#ff5fa2}`,
+js:"",
+steps:["Salin HTML dan CSS. Tukar nombor dalam div dengan gambar atau kandungan kau.","Ubah <code>90px</code> untuk saiz minimum setiap kotak. Lebih besar, lebih sedikit lajur.","Cuba kecilkan tetingkap browser untuk tengok lajur berubah sendiri."]},
+
+{cat:"Kreatif",lvl:"Pertengahan",title:"Lukisan CSS guna div",use:"Ilustrasi ringan, ikon atau maskot tanpa perlu muat turun gambar. Bagus untuk belajar position dan border-radius.",desc:"Div boleh jadi apa sahaja bila dibulatkan dan diletak ikut koordinat. Ini muka yang berkelip, tanpa gambar.",
+html:`<div class="face">
+  <div class="eye l"></div>
+  <div class="eye r"></div>
+  <div class="mouth"></div>
+</div>`,
+css:`.face{width:170px;height:170px; /* UBAH: saiz muka; ubah mata dan mulut ikut nisbah */ border-radius:50%;background:#ffe45c; /* UBAH: warna muka */
+  border:4px solid #101828;position:relative}
+.eye{position:absolute;top:56px;width:18px;height:26px;border-radius:50%;
+  background:#101828;animation:blink 4s infinite} /* UBAH: kelajuan kelip mata */
+.l{left:48px}
+.r{right:48px}
+.mouth{position:absolute;left:50%;bottom:36px;width:70px;height:34px;
+  translate:-50% 0;border:4px solid #101828;border-top:0;border-radius:0 0 70px 70px}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@media(prefers-reduced-motion:reduce){.eye{animation:none}}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Tukar warna <code>background</code> pada <code>.face</code> untuk ubah watak.","Kunci utamanya: <code>position:absolute</code> di dalam induk <code>position:relative</code>, dan <code>border-radius:50%</code> untuk bulatan."]},
+
+{cat:"Asas",lvl:"Asas",title:"Jadual berjalur",use:"Jadual markah, senarai harga, jadual waktu atau laporan data.",desc:"Table dengan baris selang-seli dan sorotan bila hover.",
+html:`<table class="tbl">
+  <thead><tr><th>Nama</th><th>Kursus</th><th>Markah</th> <!-- UBAH: tajuk lajur --> </tr></thead>
+  <tbody>
+    <tr><td>Aina</td><td>Fotografi Digital</td><td>88</td></tr> <!-- UBAH: satu baris data; salin untuk tambah baris -->
+    <tr><td>Hakim</td><td>Reka Bentuk Web</td><td>79</td></tr>
+    <tr><td>Sofia</td><td>Animasi 2D</td><td>93</td></tr>
+    <tr><td>Daniel</td><td>Fotografi Digital</td><td>71</td></tr>
+  </tbody>
+</table>`,
+css:`.tbl{border-collapse:collapse;width:92%;max-width:440px; /* UBAH: lebar maksimum jadual */ font-family:system-ui,sans-serif;font-size:.95rem}
+.tbl th{background:#101828;color:#fff; /* UBAH: warna kepala jadual */ text-align:left;padding:10px 12px}
+.tbl th:first-child{border-radius:10px 0 0 0}
+.tbl th:last-child{border-radius:0 10px 0 0}
+.tbl td{padding:10px 12px;border-bottom:1px solid #e3e7f0}
+.tbl tbody tr:nth-child(even){background:#f4f6fb} /* UBAH: warna baris selang-seli */
+.tbl tbody tr:hover{background:#e7ecff}`,
+js:"",
+steps:["Salin HTML dan tukar baris dalam <code>&lt;tbody&gt;</code>.","Tambah CSS. Untuk skrin kecil, bungkus jadual dalam div dengan <code>overflow-x:auto</code>."]},
+
+{cat:"Navigasi",lvl:"Pertengahan",title:"Butang Seterusnya / Kembali",use:"Borang pendaftaran berperingkat, tutorial langkah demi langkah, kuiz atau proses checkout.",desc:"Wizard tiga langkah dengan bar kemajuan. Butang Kembali dimatikan di langkah pertama, dan Seterusnya bertukar jadi Hantar di langkah akhir.",
+html:`<div class="wz">
+  <div class="dots"><i class="on"></i><i></i><i></i></div> <!-- UBAH: satu <i> untuk setiap langkah -->
+  <h3 id="t"></h3>
+  <p id="d"></p>
+  <div class="btns">
+    <button id="bk" class="ghost">Kembali</button>
+    <button id="nx">Seterusnya</button>
+  </div>
+</div>`,
+css:`.wz{box-sizing:border-box;width:min(92%,340px); /* UBAH: lebar kad */ padding:22px;border:2px solid #101828;border-radius:16px;
+  background:#fff;font-family:system-ui,sans-serif}
+.dots{display:flex;gap:6px;margin-bottom:14px}
+.dots i{flex:1;height:6px;border-radius:9px;background:#e3e7f0;transition:background .3s}
+.dots i.on{background:#3b5bff} /* UBAH: warna bar kemajuan */
+.wz h3{margin:0 0 4px}
+.wz p{margin:0 0 18px;color:#5b667a;min-height:3em}
+.btns{display:flex;gap:10px}
+.btns button{flex:1;padding:11px;border-radius:10px;border:2px solid #101828;
+  background:#101828;color:#fff;font:inherit; /* UBAH: warna butang utama */ font-weight:600;cursor:pointer}
+.btns .ghost{background:#fff;color:#101828}
+.btns button:disabled{opacity:.35;cursor:not-allowed}`,
+js:`var S=[
+  ['Langkah 1: Akaun','Isi nama dan e-mel kau.'],
+  ['Langkah 2: Pilihan','Pilih kursus yang kau minat.'],
+  ['Langkah 3: Siap','Semak maklumat, kemudian hantar.']
+];
+var i=0;
+var dots=document.querySelectorAll('.dots i');
+var bk=document.getElementById('bk');
+var nx=document.getElementById('nx');
+function show(){
+  document.getElementById('t').textContent=S[i][0];
+  document.getElementById('d').textContent=S[i][1];
+  dots.forEach(function(d,k){d.classList.toggle('on',k<=i)});
+  bk.disabled=(i===0);
+  nx.textContent=(i===S.length-1)?'Hantar':'Seterusnya';
+}
+bk.onclick=function(){if(i>0){i--;show()}};
+nx.onclick=function(){
+  if(i<S.length-1){i++;show()}
+  else{nx.textContent='Dihantar!'}
+};
+show();`,
+steps:["Salin ketiga-tiga bahagian.","Tukar tajuk dan teks setiap langkah dalam senarai <code>S</code>. Tambah baris baru untuk tambah langkah, dan tambah satu <code>&lt;i&gt;</code> dalam <code>.dots</code>.","Bahagian <code>else</code> dalam <code>nx.onclick</code> ialah tempat letak kod hantar borang kau."]},
+
+{cat:"Navigasi",lvl:"Pertengahan",title:"Search bar boleh kembang",use:"Header laman web atau aplikasi yang ruangnya terhad, terutama di telefon.",desc:"Bermula sebagai ikon kecil, kembang jadi ruang taip bila diklik. Tutup dengan Escape atau klik luar bila kosong.",
+html:`<div class="sb" id="sb">
+  <input id="q" type="search" placeholder="Cari..." aria-label="Cari"> <!-- UBAH: teks petunjuk (placeholder) -->
+  <button id="go" aria-label="Cari">
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
+  </button>
+</div>`,
+css:`.sb{box-sizing:border-box;display:flex;align-items:center;width:46px;height:46px; /* UBAH: saiz ikon bulat; ubah butang 42px sekali */ border:2px solid #101828;
+  border-radius:99px;background:#fff;overflow:hidden;font-family:system-ui,sans-serif;
+  transition:width .4s cubic-bezier(.2,.8,.2,1)}
+.sb.open{width:min(92%,300px)} /* UBAH: lebar bila terbuka */
+.sb input{-webkit-appearance:none;appearance:none;flex:1;min-width:0;width:0;margin:0;border:0;
+  outline:0;padding:0;font:inherit;background:none;opacity:0;transition:opacity .2s,padding .4s}
+.sb.open input{opacity:1;padding-left:16px;transition-delay:.15s}
+.sb button{flex:none;width:42px;height:42px;border:0;background:none;color:#101828;
+  cursor:pointer;display:grid;place-items:center}`,
+js:`var sb=document.getElementById('sb');
+var q=document.getElementById('q');
+function setOpen(o){
+  sb.classList.toggle('open',o);
+  q.tabIndex=o?0:-1;
+  if(o)q.focus();
+}
+document.getElementById('go').onclick=function(){
+  if(!sb.classList.contains('open')){setOpen(true)}
+  else if(q.value.trim()===''){setOpen(false)}
+  else{ /* letak fungsi carian di sini */ }
+};
+q.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){q.value='';setOpen(false)}
+  if(e.key==='Enter'){ /* letak fungsi carian di sini */ }
+});
+document.addEventListener('click',function(e){
+  if(!sb.contains(e.target)&&q.value==='')setOpen(false);
+});
+setOpen(false);`,
+steps:["Salin HTML, CSS dan JS.","Letak kod carian kau di tempat bertanda <code>letak fungsi carian di sini</code>. Nilai taip ada dalam <code>q.value</code>.","Tukar lebar bila terbuka pada <code>.sb.open</code>."]},
+
+{cat:"Navigasi",lvl:"Pertengahan",title:"Burger menu beranimasi",use:"Menu utama laman web di telefon, bila ruang tak cukup untuk papar semua pautan.",desc:"Tiga garis berubah jadi X bila ditekan, dan menu jatuh turun. Escape menutup menu.",
+html:`<div class="nv" id="nv">
+  <button class="bg" id="bg" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="mn">
+    <li>Utama</li><li>Karya</li><li>Kursus</li><li>Hubungi</li> <!-- UBAH: item menu; tukar kepada <a href> untuk pautan sebenar -->
+  </ul>
+</div>`,
+css:`.nv{position:relative;font-family:system-ui,sans-serif}
+.bg{width:52px;height:52px; /* UBAH: saiz butang */ border:2px solid #101828;border-radius:14px;background:#fff;
+  cursor:pointer;display:grid;place-content:center;gap:5px}
+.bg span{display:block;width:24px;height:3px;border-radius:3px;background:#101828;
+  transition:transform .35s,opacity .2s}
+.nv.open .bg span:nth-child(1){transform:translateY(8px) rotate(45deg)} /* UBAH: 8px = tinggi garis (3px) + jarak (5px) */
+.nv.open .bg span:nth-child(2){opacity:0}
+.nv.open .bg span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.mn{list-style:none;margin:10px 0 0;padding:6px;position:absolute;left:0;min-width:180px;
+  background:#fff;border:2px solid #101828;border-radius:14px;box-shadow:6px 6px 0 #3b5bff; /* UBAH: warna bayang menu */
+  opacity:0;transform:translateY(-8px);pointer-events:none;transition:.25s}
+.nv.open .mn{opacity:1;transform:none;pointer-events:auto}
+.mn li{padding:10px 12px;border-radius:8px;font-weight:600;cursor:pointer}
+.mn li:hover{background:#ffe45c} /* UBAH: warna bila hover */ `,
+js:`var nv=document.getElementById('nv');
+var bg=document.getElementById('bg');
+function setOpen(o){
+  nv.classList.toggle('open',o);
+  bg.setAttribute('aria-expanded',o);
+}
+bg.onclick=function(){setOpen(!nv.classList.contains('open'))};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false)});`,
+steps:["Salin HTML, CSS dan JS.","Tukar pautan dalam <code>&lt;ul class=\"mn\"&gt;</code>. Tukar <code>&lt;li&gt;</code> kepada <code>&lt;a&gt;</code> untuk pautan sebenar.","Animasi X bergantung pada jarak <code>8px</code> (tinggi garis 3px + jarak 5px). Kalau ubah salah satu, ubah juga nilai 8px."]},
+
+{cat:"Interaktif",lvl:"Pertengahan",title:"Popup (modal)",use:"Pengesahan sebelum padam, borang log masuk, atau pratonton gambar.",desc:"Kotak dialog di atas latar gelap. Tutup dengan Batal, klik di luar kotak, atau Escape. Fokus dipindah ke dalam popup bila dibuka.",
+html:`<button class="opn" id="op">Buka popup</button>
+<div class="ov" id="ov" aria-hidden="true">
+  <div class="md" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <h3 id="mt">Sahkan tindakan</h3> <!-- UBAH: tajuk popup -->
+    <p>Adakah kau pasti mahu teruskan?</p> <!-- UBAH: mesej -->
+    <div class="row">
+      <button class="no" id="no">Batal</button>
+      <button class="yes" id="yes">Ya, teruskan</button>
+    </div>
+  </div>
+</div>`,
+css:`.opn{background:#3b5bff;color:#fff; /* UBAH: warna butang Buka popup */ border:0;border-radius:10px;padding:11px 18px;
+  font:600 1rem system-ui,sans-serif;cursor:pointer}
+.ov{position:fixed;inset:0;background:rgba(16,24,40,.55); /* UBAH: kegelapan latar */ display:grid;place-items:center;
+  opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;
+  font-family:system-ui,sans-serif}
+.ov.show{opacity:1;visibility:visible}
+.md{width:min(86%,300px); /* UBAH: lebar popup */ background:#fff;border-radius:16px;padding:22px;
+  transform:scale(.92) translateY(10px);transition:transform .25s}
+.ov.show .md{transform:none}
+.md h3{margin:0 0 6px}
+.md p{margin:0 0 18px;color:#5b667a}
+.row{display:flex;gap:10px;justify-content:flex-end}
+.row button{border-radius:9px;padding:9px 14px;border:2px solid #101828;
+  font:600 .95rem system-ui,sans-serif;cursor:pointer}
+.no{background:#fff}
+.yes{background:#101828;color:#fff} /* UBAH: warna butang utama */ `,
+js:`var ov=document.getElementById('ov');
+var op=document.getElementById('op');
+function show(o){
+  ov.classList.toggle('show',o);
+  ov.setAttribute('aria-hidden',!o);
+  if(o){document.getElementById('no').focus()}else{op.focus()}
+}
+op.onclick=function(){show(true)};
+document.getElementById('no').onclick=function(){show(false)};
+document.getElementById('yes').onclick=function(){ /* letak tindakan di sini */ show(false)};
+ov.onclick=function(e){if(e.target===ov)show(false)};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')show(false)});`,
+steps:["Salin HTML, CSS dan JS.","Letak tindakan sebenar (padam, hantar) di tempat bertanda <code>letak tindakan di sini</code>.","Tukar teks dan tajuk dalam <code>.md</code>. Letak kandungan lain seperti borang atau gambar di dalamnya."]},
+
+{cat:"Navigasi",lvl:"Asas",title:"Tabs",use:"Halaman produk atau kursus yang ada beberapa bahagian: ringkasan, ciri, harga, ulasan.",desc:"Tukar kandungan tanpa ubah halaman. Tab aktif ditandakan dan kandungan muncul dengan animasi ringan.",
+html:`<div class="tb">
+  <div class="tl" role="tablist">
+    <button class="t on" role="tab">Ringkasan</button> <!-- UBAH: nama tab; setiap tab padan satu .pn mengikut susunan -->
+    <button class="t" role="tab">Ciri</button>
+    <button class="t" role="tab">Harga</button>
+  </div>
+  <div class="pn on" role="tabpanel">Ringkasan kursus dalam beberapa ayat.</div> <!-- UBAH: kandungan tab -->
+  <div class="pn" role="tabpanel">Senarai ciri: video, nota dan latihan.</div>
+  <div class="pn" role="tabpanel">Harga bermula RM49 sebulan.</div>
+</div>`,
+css:`.tb{width:min(94%,380px);font-family:system-ui,sans-serif}
+.tl{display:flex;gap:4px;padding:4px;background:#e7ecff; /* UBAH: warna bar tab */ border-radius:12px}
+.t{flex:1;padding:9px;border:0;border-radius:9px;background:none;font:inherit;
+  font-weight:600;color:#5b667a;cursor:pointer;transition:.25s}
+.t.on{background:#fff;color:#101828; /* UBAH: warna tab aktif */ box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.pn{display:none;padding:16px 6px;line-height:1.5}
+.pn.on{display:block;animation:in .3s}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+@media(prefers-reduced-motion:reduce){.pn.on{animation:none}}`,
+js:`var ts=document.querySelectorAll('.t');
+var ps=document.querySelectorAll('.pn');
+ts.forEach(function(t){
+  t.onclick=function(){
+    ts.forEach(function(x,k){
+      x.classList.toggle('on',x===t);
+      ps[k].classList.toggle('on',x===t);
+    });
+  };
+});`,
+steps:["Salin HTML, CSS dan JS.","Setiap butang <code>.t</code> sepadan dengan satu <code>.pn</code> mengikut susunan. Tambah kedua-duanya untuk tab baru."]},
+
+{cat:"Gambar",lvl:"Pertengahan",title:"Galeri gambar + lightbox",use:"Portfolio fotografi, galeri produk atau album: klik gambar kecil untuk lihat versi besar.",desc:"Grid gambar kecil. Klik satu dan ia dibuka besar atas latar gelap dengan kapsyen. Tutup dengan X, klik luar atau Escape.",
+html:`<div class="gl">
+  <img src="gambar/kucing.jpg" alt="Kucing oren"> <!-- UBAH: tukar src kepada gambar kau; alt ialah kapsyen -->
+  <img src="gambar/anjing.jpg" alt="Anjing coklat">
+  <img src="gambar/arnab.jpg" alt="Arnab putih">
+  <img src="gambar/panda.jpg" alt="Panda">
+  <img src="gambar/rubah.jpg" alt="Rubah">
+  <img src="gambar/beruang.jpg" alt="Beruang">
+</div>
+<div class="lb" id="lb">
+  <button id="x" aria-label="Tutup">&times;</button>
+  <img id="big" alt="">
+  <p id="cap"></p>
+</div>`,
+css:`.gl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px; /* UBAH: bilangan lajur dan jarak */ width:min(92vw,380px)}
+.gl img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;
+  cursor:zoom-in;transition:transform .2s}
+.gl img:hover{transform:scale(1.05)}
+.lb{position:fixed;inset:0;background:rgba(10,14,26,.88); /* UBAH: kegelapan latar lightbox */ display:grid;
+  place-content:center;justify-items:center;gap:10px;color:#fff;
+  font-family:system-ui,sans-serif;opacity:0;visibility:hidden;
+  transition:opacity .25s,visibility .25s}
+.lb.show{opacity:1;visibility:visible}
+.lb #big{width:min(80vw,300px); /* UBAH: saiz gambar besar */ aspect-ratio:1;object-fit:cover;border-radius:16px;
+  transform:scale(.9);transition:transform .25s}
+.lb.show #big{transform:none}
+.lb p{margin:0}
+.lb button{position:absolute;top:10px;right:14px;background:none;border:0;
+  color:#fff;font-size:2rem;cursor:pointer}`,
+js:`var lb=document.getElementById('lb');
+var big=document.getElementById('big');
+var cap=document.getElementById('cap');
+document.querySelectorAll('.gl img').forEach(function(im){
+  im.onclick=function(){
+    big.src=im.src;
+    big.alt=im.alt;
+    cap.textContent=im.alt;
+    lb.classList.add('show');
+  };
+});
+function hide(){lb.classList.remove('show')}
+document.getElementById('x').onclick=hide;
+lb.onclick=function(e){if(e.target===lb)hide()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')hide()});`,
+steps:["Salin HTML, CSS dan JS.","Tukar <code>gambar/kucing.jpg</code> dan lain-lain kepada gambar kau sendiri, atau URL Unsplash (klik kanan gambar di Unsplash, Salin alamat gambar).","Tulis kapsyen dalam atribut <code>alt</code>. Ia juga membantu skrin pembaca."]},
+
+{cat:"Gambar",lvl:"Asas",title:"Kad gambar dengan kesan hover",use:"Senarai produk, ahli pasukan, destinasi pelancongan atau mana-mana kad yang perlu gambar dan tajuk.",desc:"Gambar zum perlahan dan kapsyen naik bila di-hover. Di telefon (tiada hover), kapsyen terus dipaparkan.",
+html:`<div class="cards">
+  <figure class="cd">
+    <img src="gambar/kucing.jpg" alt="Kucing oren"> <!-- UBAH: tukar src kepada gambar kau -->
+    <figcaption><b>Oyen</b><span>Kucing oren yang manja</span></figcaption> <!-- UBAH: tajuk dan penerangan kad -->
+  </figure>
+  <figure class="cd">
+    <img src="gambar/anjing.jpg" alt="Anjing coklat">
+    <figcaption><b>Bobi</b><span>Anjing yang setia</span></figcaption>
+  </figure>
+</div>`,
+css:`.cards{display:flex;gap:12px;width:min(92vw,380px)}
+.cd{flex:1;margin:0;position:relative;overflow:hidden;border-radius:16px;
+  aspect-ratio:3/4; /* UBAH: nisbah kad; contoh 1/1 untuk petak */ font-family:system-ui,sans-serif}
+.cd img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.cd:hover img{transform:scale(1.12)} /* UBAH: tahap zum bila hover */
+.cd figcaption{position:absolute;inset:auto 0 0;padding:34px 12px 12px;color:#fff;
+  display:flex;flex-direction:column;background:linear-gradient(transparent,rgba(0,0,0,.7)); /* UBAH: kegelapan kawasan kapsyen */
+  transform:translateY(40%);opacity:0;transition:.35s}
+.cd:hover figcaption{transform:none;opacity:1}
+.cd span{font-size:.85rem;opacity:.85}
+@media(hover:none){.cd figcaption{transform:none;opacity:1}}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Tukar <code>gambar/kucing.jpg</code> kepada gambar kau sendiri atau URL Unsplash.","Ubah nisbah kad pada <code>aspect-ratio:3/4</code>. Contoh <code>1/1</code> untuk petak."]},
+
+{cat:"Gambar",lvl:"Terkini",title:"Slider sebelum / selepas",use:"Tunjuk kesan suntingan foto, renovasi, rawatan atau perbandingan dua versi gambar.",desc:"Seret ke kiri atau kanan untuk bandingkan dua gambar yang sama. Contoh ini: kiri hitam putih, kanan berwarna.",
+html:`<div class="cmp" id="cmp">
+  <img src="gambar/rubah.jpg" alt="Selepas"> <!-- UBAH: gambar SELEPAS -->
+  <div class="bef"><img src="gambar/rubah.jpg" alt="Sebelum"> <!-- UBAH: gambar SEBELUM; ganti dengan versi asal --> </div>
+  <span class="ln"></span>
+  <input type="range" min="0" max="100" value="50" id="rng" aria-label="Bandingkan sebelum dan selepas">
+</div>`,
+css:`.cmp{position:relative;width:min(92vw,340px);aspect-ratio:1; /* UBAH: saiz dan nisbah; kedua-dua gambar mesti sama saiz */ border-radius:16px;
+  overflow:hidden;--x:50%}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.bef{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--x)) 0 0)}
+.bef img{filter:grayscale(1) contrast(.9) brightness(.9)} /* UBAH: buang baris ini bila guna dua gambar berbeza */
+.ln{position:absolute;top:0;bottom:0;left:var(--x);width:3px;background:#fff;
+  translate:-50% 0;pointer-events:none;box-shadow:0 0 8px rgba(0,0,0,.4)}
+.ln::after{content:"";position:absolute;top:50%;left:50%;width:34px;height:34px;
+  border-radius:50%;background:#fff;translate:-50% -50%;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.cmp input{position:absolute;inset:0;width:100%;height:100%;margin:0;
+  opacity:0;cursor:ew-resize}`,
+js:`var cmp=document.getElementById('cmp');
+document.getElementById('rng').oninput=function(e){
+  cmp.style.setProperty('--x',e.target.value+'%');
+};`,
+steps:["Salin HTML, CSS dan JS.","Gambar pertama ialah <b>selepas</b>, gambar dalam <code>.bef</code> ialah <b>sebelum</b>. Letak dua fail berbeza, dan buang baris <code>filter:grayscale</code> dalam CSS.","Kedua-dua gambar mesti sama saiz dan nisbah supaya sejajar."]},
+
+{cat:"Gambar",lvl:"Asas",title:"Banner gambar dengan teks",use:"Bahagian pembuka (hero) laman web, banner promosi atau kepala artikel.",desc:"Teks dan butang di atas gambar. Lapisan gradient gelap di bawah memastikan tulisan sentiasa jelas dibaca.",
+html:`<div class="hero">
+  <img src="gambar/panda.jpg" alt="Panda"> <!-- UBAH: gambar banner -->
+  <div class="tx">
+    <h3>Kenali haiwan comel</h3> <!-- UBAH: tajuk -->
+    <p>Koleksi kegemaran minggu ini</p> <!-- UBAH: teks sokongan -->
+    <a href="#">Lihat koleksi</a> <!-- UBAH: teks dan pautan butang -->
+  </div>
+</div>`,
+css:`.hero{position:relative;width:min(92vw,380px);aspect-ratio:4/3; /* UBAH: nisbah banner */ border-radius:18px;
+  overflow:hidden;color:#fff;font-family:system-ui,sans-serif}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.tx{position:absolute;inset:0;padding:18px;display:flex;flex-direction:column;
+  justify-content:flex-end;
+  background:linear-gradient(to top,rgba(10,14,26,.85),rgba(10,14,26,.1) 65%)} /* UBAH: kegelapan; naikkan .85 jika teks susah dibaca */
+.tx h3{margin:0 0 2px;font-size:1.35rem}
+.tx p{margin:0 0 10px;opacity:.85}
+.tx a{align-self:flex-start;background:#ffe45c; /* UBAH: warna butang */ color:#101828;font-weight:600;
+  text-decoration:none;padding:8px 14px;border-radius:99px}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Tukar <code>gambar/panda.jpg</code> kepada gambar kau, dan tukar <code>href=\"#\"</code> kepada pautan sebenar.","Kalau gambar cerah, tambah nilai <code>.85</code> dalam gradient supaya teks lebih jelas."]},
+
+{cat:"Kreatif",lvl:"Pertengahan",title:"Loader perkataan bergulir",use:"Teks \"sedang memuat\" yang menarik, atau pengepala yang bertukar-tukar perkataan seperti ciri produk, kategori atau kata kunci.",desc:"Perkataan bergulir ke atas dalam gelung, dengan pudar lembut di atas dan bawah. CSS sahaja, tanpa JavaScript.",
+html:`<div class="card">
+  <div class="loader">
+    <p>loading</p> <!-- UBAH: teks tetap -->
+    <div class="words">
+      <span class="word">buttons</span> <!-- UBAH: perkataan; perkataan terakhir mesti sama dengan yang pertama -->
+      <span class="word">forms</span>
+      <span class="word">switches</span>
+      <span class="word">cards</span>
+      <span class="word">buttons</span>
+    </div>
+  </div>
+</div>`,
+css:`.card{
+  /* warna untuk pudar lembut di atas dan bawah .words */
+  --bg-color:#111;
+  background-color:var(--bg-color);
+  padding:1rem 2rem;
+  border-radius:1.25rem;
+}
+.loader{
+  color:#7c7c7c; /* UBAH: warna teks tetap */
+  font-family:"Poppins",system-ui,sans-serif;
+  font-weight:500;
+  font-size:25px;
+  box-sizing:content-box;
+  height:40px;
+  padding:10px;
+  display:flex;
+  border-radius:8px;
+}
+.loader p{margin:0}
+.words{overflow:hidden;position:relative}
+.words::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(var(--bg-color) 10%,transparent 30%,transparent 70%,var(--bg-color) 90%);
+  z-index:20;
+}
+.word{
+  display:block;
+  height:100%;
+  padding-left:6px;
+  color:#956afa; /* UBAH: warna perkataan bergulir */
+  animation:spin 4s infinite; /* UBAH: tempoh satu gelungan penuh */
+}
+@keyframes spin{
+  10%{transform:translateY(-102%)}
+  25%{transform:translateY(-100%)}
+  35%{transform:translateY(-202%)}
+  50%{transform:translateY(-200%)}
+  60%{transform:translateY(-302%)}
+  75%{transform:translateY(-300%)}
+  85%{transform:translateY(-402%)}
+  100%{transform:translateY(-400%)}
+}
+@media(prefers-reduced-motion:reduce){.word{animation:none}}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Tukar perkataan dalam <code>.word</code>. Perkataan terakhir mesti sama dengan yang pertama supaya gelungan nampak lancar.","Nak tambah perkataan? Tambah satu <code>&lt;span&gt;</code> dan satu pasang langkah dalam <code>@keyframes</code> (setiap perkataan bergerak -100%), kemudian panjangkan tempoh <code>4s</code>.","Tukar <code>--bg-color</code> kalau latar kad kau bukan hitam, supaya pudar atas dan bawah sepadan."]},
+
+{cat:"Interaktif",lvl:"Asas",title:"Butang Code sapuan senget",use:"Butang ajakan bertindak (CTA) seperti Lihat kod, Muat turun atau Daftar.",desc:"Butang gradient ungu. Bila di-hover, lapisan hitam senget menyapu keluar. Bila ditekan, butang mengecil sedikit.",
+html:`<button class="cssbuttons-io"> <!-- UBAH: tukar teks Code dan ikon SVG di dalam span -->
+  <span>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M24 12l-5.657 5.657-1.414-1.414L21.172 12l-4.243-4.243 1.414-1.414L24 12zM2.828 12l4.243 4.243-1.414 1.414L0 12l5.657-5.657L7.07 7.757 2.828 12zm6.96 9H7.66l6.552-18h2.128L9.788 21z" fill="currentColor"></path>
+    </svg>
+    Code
+  </span>
+</button>`,
+css:`.cssbuttons-io{
+  position:relative;
+  font-family:inherit;
+  font-weight:500;
+  font-size:18px; /* UBAH: saiz butang (semua ikut em) */
+  letter-spacing:.05em;
+  border-radius:.8em;
+  cursor:pointer;
+  border:none;
+  background:linear-gradient(to right,#8e2de2,#4a00e0); /* UBAH: warna gradient butang */
+  color:ghostwhite;
+  overflow:hidden;
+}
+.cssbuttons-io svg{width:1.2em;height:1.2em;margin-right:.5em}
+.cssbuttons-io span{
+  position:relative;
+  z-index:10;
+  transition:color .4s;
+  display:inline-flex;
+  align-items:center;
+  padding:.8em 1.2em .8em 1.05em;
+}
+.cssbuttons-io::before,
+.cssbuttons-io::after{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+.cssbuttons-io::before{
+  content:"";
+  background:#000;
+  width:120%;
+  left:-10%;
+  transform:skew(30deg);
+  transition:transform .4s cubic-bezier(.3,1,.8,1);
+}
+.cssbuttons-io:hover::before{transform:translate3d(100%,0,0)} /* UBAH: lapisan hitam (#000 pada ::before) bergerak keluar bila hover */
+.cssbuttons-io:active{transform:scale(.95)}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Tukar warna pada <code>linear-gradient(to right,#8e2de2,#4a00e0)</code>. Warna lapisan hover ialah <code>background:#000</code> pada <code>::before</code>.","Tukar teks \"Code\" dan ikon SVG mengikut keperluan. Saiz butang ikut <code>font-size</code>."]},
+
+{cat:"Interaktif",lvl:"Asas",title:"Tooltip beranimasi",use:"Penerangan ringkas bila hover pada ikon, butang atau kad. Contohnya nama pautan atau petua penggunaan.",desc:"Kotak kecil melantun naik di atas kad bila di-hover, dan kad bertukar kepada gradient biru. Di telefon, ketik kad untuk lihat kesannya.",
+html:`<div class="uiverse">
+  <span class="tooltip">uiverse.io</span> <!-- UBAH: teks tooltip -->
+  <span>Tooltip</span> <!-- UBAH: teks utama kad -->
+</div>`,
+css:`.uiverse{
+  position:relative;
+  background:#ffffff;
+  color:#000;
+  padding:15px;
+  margin:10px;
+  border-radius:10px;
+  width:150px; /* UBAH: saiz kad */
+  height:50px;
+  font-size:17px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  box-shadow:0 10px 10px rgba(0,0,0,.1);
+  cursor:pointer;
+  transition:all .2s cubic-bezier(.68,-.55,.265,1.55);
+}
+.tooltip{
+  position:absolute;
+  top:0;
+  font-size:14px;
+  background:#ffffff;
+  color:#ffffff;
+  padding:5px 8px;
+  border-radius:5px;
+  box-shadow:0 10px 10px rgba(0,0,0,.1);
+  opacity:0;
+  pointer-events:none;
+  transition:all .3s cubic-bezier(.68,-.55,.265,1.55);
+}
+.tooltip::before{
+  position:absolute;
+  content:"";
+  height:8px;
+  width:8px;
+  background:#ffffff;
+  bottom:-3px;
+  left:50%;
+  transform:translate(-50%) rotate(45deg);
+  transition:all .3s cubic-bezier(.68,-.55,.265,1.55);
+}
+.uiverse:hover .tooltip{
+  top:-45px; /* UBAH: jarak tooltip dari kad */
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.uiverse:hover,
+.uiverse:hover .tooltip,
+.uiverse:hover .tooltip::before{
+  background-color:rgb(3,77,146); /* UBAH: warna hover; ubah juga gradient di bawahnya */
+  background-image:linear-gradient(320deg,rgb(3,77,146),rgb(0,60,255));
+  color:#ffffff;
+}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Tukar teks dalam <code>.tooltip</code> (kotak yang muncul) dan teks utama di bawahnya.","Tukar warna hover pada <code>linear-gradient(320deg,...)</code>. Naikkan nilai <code>-45px</code> kalau nak tooltip lebih jauh ke atas."]},
+
+{cat:"Kreatif",lvl:"Terkini",title:"Kad cuaca yang kembang",use:"Widget cuaca, ringkasan statistik atau kad ringkas yang boleh kembang untuk tunjuk butiran lanjut.",desc:"Kad cuaca ringkas yang membuka panel butiran (kelembapan, angin, AQI, suhu rasa, tekanan) bila di-hover atau diketik.",
+html:`<div class="cardm">
+  <div class="card">
+    <svg class="weather" width="100" height="100" viewBox="0 0 100 100">
+      <circle cx="36" cy="36" r="16" fill="#ffc83d"/>
+      <path d="M36 8v7M36 57v7M8 36h7M57 36h7M16 16l5 5M56 16l-5 5M16 56l5-5" stroke="#ffc83d" stroke-width="4" stroke-linecap="round"/>
+      <g fill="#dfe6ee"><circle cx="46" cy="68" r="14"/><circle cx="64" cy="62" r="18"/><circle cx="80" cy="72" r="10"/><rect x="40" y="68" width="46" height="14" rx="7"/></g>
+    </svg>
+    <div class="main">23 °C</div> <!-- UBAH: suhu -->
+    <div class="mainsub">Dunmore, Ireland</div> <!-- UBAH: nama bandar -->
+  </div>
+
+  <div class="card2">
+    <div class="upper">
+      <div class="humidity">
+        <div class="humiditytext">Humidity<br>30%</div> <!-- UBAH: nilai kelembapan -->
+        <svg class="humiditysvg" width="30" height="30" viewBox="0 0 30 30"><path d="M15 4C15 4 6 14 6 19a9 9 0 0 0 18 0C24 14 15 4 15 4z" fill="#3b9eff"/></svg>
+      </div>
+      <div class="air">
+        <div class="airtext">Wind<br>8 Km/h</div>
+        <svg class="airsvg" width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#26a5d8" stroke-width="2.4" stroke-linecap="round"><path d="M4 11h14a3.5 3.5 0 1 0-3.5-3.5M4 16h20a3.5 3.5 0 1 1-3.5 3.5M4 21h10"/></svg>
+      </div>
+    </div>
+
+    <div class="lower">
+      <div class="aqi">
+        <svg class="aqisvg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2fb67c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M6.5 10.5l2.5 2.5 4.5-5"/></svg>
+        <div class="aqitext">AQI<br>30</div>
+      </div>
+      <div class="realfeel">
+        <svg class="rfsvg" width="20" height="20" viewBox="0 0 20 20" fill="#ff7a59"><rect x="8" y="2" width="4" height="11" rx="2"/><circle cx="10" cy="15" r="4"/></svg>
+        <div class="realfeeltext">Real Feel<br>21 °C</div>
+      </div>
+      <div class="pressure">
+        <svg class="pressuresvg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1fa3b5" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 10l4-3"/></svg>
+        <div class="pressuretext">Pressure<br>1012 mbar</div>
+      </div>
+      <div class="card3">Healthy</div> <!-- UBAH: status kualiti udara -->
+    </div>
+  </div>
+</div>`,
+css:`.cardm{
+  position:absolute;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  top:46.64%;
+  left:50%;
+}
+.card{
+  position:absolute;
+  width:250px;
+  height:130px;
+  border-radius:25px;
+  background:whitesmoke;
+  color:black;
+  z-index:2;
+  transition:.4s ease-in-out;
+}
+.weather{position:relative;margin:1em}
+.main{font-size:2em;position:relative;top:-3em;left:4.3em}
+.mainsub{position:relative;top:-10.2em;left:14em;font-size:.6em}
+.card2{
+  position:absolute;
+  display:flex;
+  flex-direction:row;
+  width:240px;
+  height:130px;
+  border-radius:35px;
+  background:white;
+  z-index:-1;
+  transition:.4s ease-in-out;
+}
+.card:hover{background-color:#FFE87C;cursor:pointer} /* UBAH: warna kad bila hover */
+.card:hover + .card2{
+  height:300px;
+  border-bottom-left-radius:0;
+  border-bottom-right-radius:0;
+}
+.card:hover + .card2 .lower{top:20.2em}
+.upper{
+  display:flex;
+  flex-direction:row;
+  position:relative;
+  color:black;
+  left:1.8em;
+  top:.5em;
+  gap:4em;
+}
+.humiditytext{position:relative;left:3.6em;top:2.7em;font-size:.6em}
+.airtext{position:relative;left:3.8em;top:2.7em;font-size:.6em}
+.lower{
+  display:flex;
+  flex-direction:row;
+  position:absolute;
+  text-align:center;
+  color:black;
+  left:3em;
+  top:1em;
+  margin-top:.7em;
+  font-size:.7em;
+  transition:.4s ease-in-out;
+}
+.aqi{margin-right:3.25em}
+.realfeel{margin-right:1.8em}
+.card3{
+  position:absolute;
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  align-items:center;
+  width:240px;
+  height:30px;
+  top:4.7em;
+  left:-2.4em;
+  font-size:1.24em;
+  border-bottom-left-radius:35px;
+  border-bottom-right-radius:35px;
+  background:limegreen; /* UBAH: warna bar status */
+  transition:.4s ease-in-out;
+}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Hover (atau ketik di telefon) kad kuning untuk buka panel butiran.","Tukar nombor dan nama bandar terus dalam HTML. Ikon ialah SVG sebaris, jadi warnanya boleh diubah dengan atribut <code>fill</code> atau <code>stroke</code>.","Kedudukan elemen guna unit <code>em</code> yang ditala tangan. Kalau ubah saiz fon, semak semula susun atur."]},
+
+{cat:"Gaya Apple",lvl:"Asas",title:"Tipografi gaya Apple",use:"Tajuk, perenggan dan nota kecil di mana-mana laman yang mahu rupa bersih dan mudah dibaca, seperti halaman produk.",desc:"Cara Apple menyusun teks: font sistem, tajuk besar yang rapat, teks sekunder kelabu lembut dan jarak baris yang selesa. San Francisco hanya ada pada peranti Apple, di Windows atau Android ia jatuh kepada font sistem.",
+html:`<article class="type">
+  <p class="eyebrow">Baru</p> <!-- UBAH: label kecil di atas tajuk -->
+  <h1>Reka bentuk yang terasa mudah.</h1> <!-- UBAH: tajuk -->
+  <p class="lead">Tajuk besar yang rapat, teks sekunder yang lembut dan jarak yang selesa.</p>
+  <p class="body">Teks isi guna saiz 17px dengan jarak baris 1.47, seperti halaman Apple.</p>
+  <p class="cap">Nota kecil &middot; 12px &middot; warna sekunder</p>
+</article>`,
+css:`:root{
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",
+    "Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --label:#1d1d1f;   /* teks utama */
+  --label2:#6e6e73;  /* teks sekunder */
+}
+body{
+  margin:0;
+  background:#fff;
+  font-family:var(--font);
+  color:var(--label);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+.type{width:min(88vw,360px)}
+.eyebrow{margin:0 0 6px;font-size:14px;font-weight:600;color:#bf4800} /* UBAH: warna aksen label */
+.type h1{margin:0 0 10px;font-size:clamp(30px,9vw,40px); /* UBAH: saiz tajuk: minimum, ikut skrin, maksimum */ font-weight:700;
+  letter-spacing:-.022em;line-height:1.08}
+.lead{margin:0 0 14px;font-size:19px;line-height:1.37;font-weight:500;color:var(--label2)}
+.body{margin:0 0 12px;font-size:17px;line-height:1.47;letter-spacing:-.022em}
+.cap{margin:0;font-size:12px;line-height:1.33;color:var(--label2)}`,
+js:"",
+steps:["Salin CSS. Barisan <code>--font</code> ialah rahsianya: <code>-apple-system</code> memilih San Francisco di iPhone dan Mac.","Tajuk besar guna <code>letter-spacing</code> negatif (rapat), manakala teks kecil dibiarkan lebih longgar. Itu yang bagi rupa Apple.","Guna dua warna teks sahaja: <code>--label</code> untuk utama dan <code>--label2</code> untuk sekunder."]},
+
+{cat:"Gaya Apple",lvl:"Asas",title:"Bayang halus berlapis",use:"Kad, panel dan menu yang perlu nampak terangkat daripada latar tanpa rupa berat atau kotor.",desc:"Tiga tahap ketinggian guna beberapa bayang nipis yang bertindih, bukan satu bayang tebal. Ada garis halus 0.5px di tepi. Hover untuk angkat.",
+html:`<div class="row">
+  <div class="sh s1">Rendah</div> <!-- UBAH: ganti dengan kandungan kad -->
+  <div class="sh s2">Sederhana</div>
+  <div class="sh s3">Tinggi</div>
+</div>`,
+css:`:root{
+  --s1:0 0 0 .5px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04),0 2px 6px rgba(0,0,0,.04);
+  --s2:0 0 0 .5px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.08);
+  --s3:0 0 0 .5px rgba(0,0,0,.06),0 4px 8px rgba(0,0,0,.04),
+    0 16px 40px rgba(0,0,0,.12),0 32px 64px rgba(0,0,0,.06);
+}
+body{background:#f5f5f7; /* UBAH: latar kelabu cerah supaya bayang nampak */ font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",system-ui,sans-serif}
+.row{display:flex;gap:14px;width:min(92vw,380px)}
+.sh{flex:1;aspect-ratio:1;border-radius:20px;background:#fff;color:#1d1d1f;
+  display:grid;place-items:center;font-size:13px;font-weight:600;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.s1{box-shadow:var(--s1)} /* UBAH: pilih --s1, --s2 atau --s3 untuk tahap bayang */
+.s2{box-shadow:var(--s2)}
+.s3{box-shadow:var(--s3)}
+.s1:hover{box-shadow:var(--s2);transform:translateY(-3px)}
+.s2:hover{box-shadow:var(--s3);transform:translateY(-3px)}
+.s3:hover{transform:translateY(-3px)}`,
+js:"",
+steps:["Salin CSS dan guna <code>box-shadow:var(--s1)</code>, <code>--s2</code> atau <code>--s3</code> pada mana-mana kad.","Bayang paling berkesan di atas latar kelabu cerah seperti <code>#f5f5f7</code>. Di atas latar putih ia hampir tak nampak.","Kekalkan kelegapan bawah 0.12. Kalau lebih, bayang jadi berat."]},
+
+{cat:"Gaya Apple",lvl:"Pertengahan",title:"Kad produk gaya Apple",use:"Bahagian pengenalan produk atau ciri di halaman utama: tajuk besar, satu ayat dan satu butang.",desc:"Kad putih bersudut besar dengan tajuk berpusat, butang biru berbentuk pil dan pautan \"Ketahui lagi\". Ringkas, banyak ruang kosong.",
+html:`<section class="tile">
+  <p class="eyebrow">Syfx Pro</p> <!-- UBAH: nama produk -->
+  <h2>Cepat. Ringan.<br>Cantik.</h2> <!-- UBAH: tajuk -->
+  <p class="sub">Semua komponen yang kau perlukan, dalam satu pustaka.</p>
+  <div class="links">
+    <a class="btn" href="#">Mula guna</a> <!-- UBAH: teks dan pautan butang -->
+    <a class="more" href="#">Ketahui lagi &rsaquo;</a>
+  </div>
+  <div class="visual"></div>
+</section>`,
+css:`body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.tile{box-sizing:border-box;width:min(88vw,340px);padding:26px 22px 0;border-radius:28px;background:#fff;
+  text-align:center;overflow:hidden;color:#1d1d1f;
+  box-shadow:0 0 0 .5px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08)}
+.eyebrow{margin:0 0 4px;font-size:14px;font-weight:600;color:#bf4800}
+.tile h2{margin:0 0 8px;font-size:34px;line-height:1.08;font-weight:700;letter-spacing:-.022em}
+.sub{margin:0 0 16px;font-size:16px;line-height:1.4;color:#6e6e73}
+.links{display:flex;gap:16px;justify-content:center;align-items:center}
+.btn{background:#0071e3;color:#fff; /* UBAH: warna aksen butang */ text-decoration:none;font-size:15px;
+  padding:9px 18px;border-radius:99px;transition:background .2s,transform .2s}
+.btn:hover{background:#0077ed}
+.btn:active{transform:scale(.97)}
+.more{color:#0066cc;text-decoration:none;font-size:15px}
+.more:hover{text-decoration:underline}
+.visual{width:62%;height:70px; /* UBAH: ruang gambar produk; ganti dengan gambar */ margin:20px auto 0;border-radius:18px 18px 0 0;
+  background:linear-gradient(180deg,#f0f0f3,#d6d6dc)}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Biru Apple ialah <code>#0071e3</code> untuk butang dan <code>#0066cc</code> untuk pautan. Guna satu warna aksen sahaja.","Tukar <code>.visual</code> dengan gambar produk kau, dan buang <code>height</code> supaya gambar menentukan tinggi."]},
+
+{cat:"Gaya Apple",lvl:"Pertengahan",title:"Kawalan segmen (iOS)",use:"Tukar paparan dalam satu skrin: Hari / Minggu / Bulan, Senarai / Grid, atau penapis ringkas.",desc:"Pilihan berbentuk satu bar dengan penanda putih yang meluncur. Pengganti tabs yang lebih ringkas, terutama di telefon.",
+html:`<div class="box">
+  <div class="seg" role="tablist">
+    <span class="thumb"></span>
+    <button class="on" role="tab">Hari</button> <!-- UBAH: nama pilihan -->
+    <button role="tab">Minggu</button>
+    <button role="tab">Bulan</button>
+  </div>
+  <p id="out">Paparan: Hari</p>
+</div>`,
+css:`body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",system-ui,sans-serif}
+.box{display:grid;gap:16px;justify-items:center;width:min(88vw,300px)}
+.seg{position:relative;display:grid;grid-template-columns:repeat(3,1fr);width:100%; /* UBAH: bilangan pilihan; padankan dengan /3 pada .thumb */
+  padding:2px;border-radius:9px;background:rgba(118,118,128,.12)}
+.seg button{position:relative;z-index:1;border:0;background:none;padding:7px 0;
+  font-size:13px;font-weight:500;font-family:inherit;color:#1d1d1f;cursor:pointer}
+.thumb{position:absolute;top:2px;bottom:2px;left:2px;width:calc((100% - 4px)/3); /* UBAH: tukar 3 jika bilangan pilihan berubah */
+  border-radius:7px;background:#fff;
+  box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04);
+  transition:transform .3s cubic-bezier(.4,0,.2,1)}
+#out{margin:0;font-size:15px;color:#6e6e73}`,
+js:`var bs=document.querySelectorAll('.seg button');
+var th=document.querySelector('.thumb');
+bs.forEach(function(b,i){
+  b.onclick=function(){
+    th.style.transform='translateX('+(i*100)+'%)';
+    bs.forEach(function(x){x.classList.toggle('on',x===b)});
+    document.getElementById('out').textContent='Paparan: '+b.textContent;
+  };
+});`,
+steps:["Salin HTML, CSS dan JS.","Tukar teks butang. Kalau bilangan pilihan bukan 3, ubah <code>repeat(3,1fr)</code> dan <code>/3</code> dalam lebar <code>.thumb</code>.","Baris <code>out.textContent</code> ialah tempat letak tindakan kau, contohnya tukar data yang dipaparkan."]},
+
+{cat:"Gaya Apple",lvl:"Terkini",title:"Bar kaca beku",use:"Navbar atau pengepala yang melekat di atas, supaya kandungan di bawahnya nampak kabur bila di-scroll.",desc:"Bar lutsinar dengan kabur dan warna yang diperkuat (blur + saturate) seperti navbar Apple. Scroll kandungan di dalam kotak untuk lihat kesannya.",
+html:`<div class="phone">
+  <header class="bar">
+    <b>Syfx</b> <!-- UBAH: nama jenama -->
+    <nav><a href="#">Komponen</a><a href="#">Panduan</a></nav> <!-- UBAH: pautan navigasi -->
+  </header>
+  <div class="feed">
+    <div style="--a:#ff9a56;--b:#ff5e7e"></div>
+    <div style="--a:#6a5cff;--b:#2bb3ff"></div>
+    <div style="--a:#38c59a;--b:#a8e063"></div>
+    <div style="--a:#ffd54a;--b:#ff8a3d"></div>
+    <div style="--a:#8a6bff;--b:#ff5fa2"></div>
+  </div>
+</div>`,
+css:`body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",system-ui,sans-serif}
+.phone{width:min(88vw,340px);height:270px;overflow:auto;position:relative;
+  border-radius:22px;background:#fff;box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 12px 32px rgba(0,0,0,.12)}
+.bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;
+  align-items:center;padding:12px 16px;
+  background:rgba(255,255,255,.72); /* UBAH: kelutsinaran bar; makin kecil, makin lutsinar */
+  -webkit-backdrop-filter:saturate(180%) blur(20px); /* UBAH: tahap kabur dan warna; ubah baris backdrop-filter di bawah juga */
+  backdrop-filter:saturate(180%) blur(20px);
+  box-shadow:0 .5px 0 rgba(0,0,0,.12)}
+.bar b{font-size:17px;letter-spacing:-.01em}
+.bar nav{display:flex;gap:16px}
+.bar a{color:#1d1d1f;text-decoration:none;font-size:13px;opacity:.8}
+.feed{margin-top:-46px; /* UBAH: sama dengan tinggi bar; buang dalam halaman sebenar */ padding:0 12px 12px;display:grid;gap:10px}
+.feed div{height:120px;border-radius:16px;background:linear-gradient(135deg,var(--a),var(--b))}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Kuncinya ialah <code>position:sticky</code> dan <code>backdrop-filter</code>. Latar mesti separa lutsinar (<code>rgba</code>) supaya kabur nampak.","Dalam halaman sebenar, letak <code>.bar</code> terus di bawah <code>&lt;body&gt;</code> dan buang <code>margin-top:-46px</code> pada <code>.feed</code>."]},
+
+{cat:"Latar Belakang",lvl:"Pertengahan",title:"Penjana gradient",use:"Cari kombinasi warna gradient untuk latar belakang, butang atau banner, kemudian salin CSS yang siap.",desc:"Pilih dua warna dan sudut, lihat hasil serta-merta, dan CSS dijana sendiri. Tekan Salin CSS untuk ambil kodnya.",
+html:`<div class="gen">
+  <div class="view" id="view"></div>
+  <div class="ctl">
+    <label><span>Warna 1</span><input type="color" id="c1" value="#2fd16b"> <!-- UBAH: warna awal --> </label>
+    <label><span>Warna 2</span><input type="color" id="c2" value="#f7e93c"></label>
+    <label><span>Sudut</span><input type="range" id="ang" min="0" max="360" value="135"><b id="av"></b></label>
+  </div>
+  <code id="out"></code>
+  <button id="cp">Salin CSS</button>
+</div>`,
+css:`body{font-family:system-ui,sans-serif;color:#1d1d1f}
+.gen{display:grid;gap:10px;width:min(92vw,340px)}
+.view{height:84px;border-radius:16px} /* UBAH: tinggi kotak pratonton */
+.ctl{display:grid;gap:6px;font-size:13px}
+.ctl label{display:flex;align-items:center;gap:10px}
+.ctl span{width:58px}
+.ctl input[type=range]{flex:1}
+.ctl input[type=color]{width:38px;height:26px;border:0;padding:0;background:none}
+code{display:block;background:#0a0a0a;color:#d6f23f;padding:8px 10px;border-radius:10px;
+  font-size:11.5px;word-break:break-all}
+.gen button{padding:9px;border:0;border-radius:10px;background:#0a0a0a;color:#fff;
+  font:600 13px system-ui,sans-serif;cursor:pointer}`,
+js:`var v=document.getElementById('view');
+var c1=document.getElementById('c1');
+var c2=document.getElementById('c2');
+var ang=document.getElementById('ang');
+var out=document.getElementById('out');
+function upd(){
+  var g='linear-gradient('+ang.value+'deg, '+c1.value+', '+c2.value+')';
+  v.style.background=g;
+  document.getElementById('av').textContent=ang.value+'deg';
+  out.textContent='background: '+g+';';
+}
+[c1,c2,ang].forEach(function(e){e.oninput=upd});
+function copyText(t,b){
+  function done(){b.textContent='Disalin!';setTimeout(function(){b.textContent='Salin CSS'},1200)}
+  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove();done()}
+  if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,fb)}else{fb()}
+}
+document.getElementById('cp').onclick=function(){copyText(out.textContent,this)};
+upd();`,
+steps:["Salin HTML, CSS dan JS untuk letak penjana dalam laman kau sendiri, atau guna ia di sini dan salin CSS yang dijana.","Tampal baris <code>background: linear-gradient(...)</code> pada mana-mana elemen.","Nak tukar kepada gradient bulat? Ganti <code>linear-gradient(sudut, ...)</code> dalam fungsi <code>upd</code> dengan <code>radial-gradient(...)</code>."]},
+
+{cat:"Latar Belakang",lvl:"Pertengahan",title:"Penjana pattern",use:"Cari corak latar belakang yang halus (titik, grid, jalur, papan catur) tanpa perlu gambar, kemudian salin CSS-nya.",desc:"Pilih corak, saiz dan dua warna. Corak dilukis dengan CSS gradient sahaja, jadi ringan dan tajam pada semua skrin.",
+html:`<div class="gen">
+  <div class="view" id="view"></div>
+  <div class="ctl">
+    <label><span>Corak</span>
+      <select id="pt">
+        <option value="dots">Titik</option>
+        <option value="grid">Grid</option>
+        <option value="stripes">Jalur serong</option>
+        <option value="check">Papan catur</option>
+      </select>
+    </label>
+    <label><span>Saiz</span><input type="range" id="sz" min="8" max="48" value="22"></label>
+    <label><span>Warna</span><input type="color" id="fg" value="#b5bccb"><input type="color" id="bg" value="#f5f5f7"> <!-- UBAH: warna corak dan warna latar awal --> </label>
+  </div>
+  <code id="out"></code>
+  <button id="cp">Salin CSS</button>
+</div>`,
+css:`body{font-family:system-ui,sans-serif;color:#1d1d1f}
+.gen{display:grid;gap:10px;width:min(92vw,340px)}
+.view{height:84px;border-radius:16px;border:1px solid rgba(0,0,0,.08)} /* UBAH: tinggi kotak pratonton */
+.ctl{display:grid;gap:6px;font-size:13px}
+.ctl label{display:flex;align-items:center;gap:10px}
+.ctl span{width:58px}
+.ctl select{flex:1;padding:4px 6px;border-radius:8px;border:1px solid #c7c7cc;font:inherit}
+.ctl input[type=range]{flex:1}
+.ctl input[type=color]{width:38px;height:26px;border:0;padding:0;background:none}
+code{display:block;background:#0a0a0a;color:#d6f23f;padding:8px 10px;border-radius:10px;
+  font-size:11px;word-break:break-all}
+.gen button{padding:9px;border:0;border-radius:10px;background:#0a0a0a;color:#fff;
+  font:600 13px system-ui,sans-serif;cursor:pointer}`,
+js:`var v=document.getElementById('view');
+var pt=document.getElementById('pt');
+var sz=document.getElementById('sz');
+var fg=document.getElementById('fg');
+var bg=document.getElementById('bg');
+var out=document.getElementById('out');
+function upd(){
+  var s=sz.value,f=fg.value,p=pt.value;
+  var size=' background-size: '+s+'px '+s+'px;';
+  var css='background-color: '+bg.value+'; background-image: ';
+  if(p==='dots')css+='radial-gradient('+f+' 1.5px, transparent 1.5px);'+size;
+  if(p==='grid')css+='linear-gradient('+f+' 1px, transparent 1px), linear-gradient(90deg, '+f+' 1px, transparent 1px);'+size;
+  if(p==='stripes')css+='repeating-linear-gradient(45deg, '+f+' 0 2px, transparent 2px '+s+'px);';
+  if(p==='check')css+='conic-gradient('+f+' 25%, transparent 0 50%, '+f+' 0 75%, transparent 0);'+size;
+  v.style.cssText=css;
+  out.textContent=css;
+}
+[pt,sz,fg,bg].forEach(function(e){e.oninput=upd});
+function copyText(t,b){
+  function done(){b.textContent='Disalin!';setTimeout(function(){b.textContent='Salin CSS'},1200)}
+  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove();done()}
+  if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,fb)}else{fb()}
+}
+document.getElementById('cp').onclick=function(){copyText(out.textContent,this)};
+upd();`,
+steps:["Pilih corak dan warna, kemudian tekan Salin CSS dan tampal pada mana-mana elemen atau <code>body</code>.","Guna dua warna yang hampir sama (contoh kelabu cerah dan kelabu muda) supaya corak halus dan tak ganggu teks.","Slider Saiz menentukan jarak antara corak. Nilai besar memberi corak yang lebih jarang."]},
+
+{cat:"Latar Belakang",lvl:"Terkini",title:"Aurora beranimasi",use:"Latar hero atau halaman pendaratan yang mahu rupa moden, lembut dan hidup.",desc:"Tiga bulatan warna yang dikaburkan dan hanyut perlahan di atas latar gelap. CSS sahaja, tanpa JavaScript.",
+html:`<div class="stage">
+  <div class="aurora"><i></i><i></i><i></i></div>
+  <p>Aurora</p> <!-- UBAH: kandungan di atas latar -->
+</div>`,
+css:`.stage{position:fixed;inset:0;background:#0b1020; /* UBAH: warna latar gelap */ overflow:hidden;display:grid;
+  place-items:center;color:#fff;font-family:system-ui,sans-serif}
+.aurora{position:absolute;inset:-20%;filter:blur(50px) saturate(1.3)} /* UBAH: tahap kabur; kecil = bentuk lebih jelas */
+.aurora i{position:absolute;width:55%;height:55%;border-radius:50%;opacity:.7;
+  animation:drift 14s ease-in-out infinite alternate}
+.aurora i:nth-child(1){background:#2fd16b;top:5%;left:5%} /* UBAH: warna dan kedudukan bulatan (ada tiga) */
+.aurora i:nth-child(2){background:#3b5bff;top:30%;left:45%;animation-duration:18s;animation-delay:-4s}
+.aurora i:nth-child(3){background:#f7e93c;top:55%;left:10%;animation-duration:22s;animation-delay:-9s}
+@keyframes drift{to{transform:translate(18%,-14%) scale(1.25)}}
+.stage p{position:relative;margin:0;font-size:1.8rem;font-weight:700;letter-spacing:-.02em}
+@media(prefers-reduced-motion:reduce){.aurora i{animation:none}}`,
+js:"",
+steps:["Salin HTML dan CSS. Letak <code>.stage</code> sebagai pembalut di belakang kandungan kau.","Tukar warna pada tiga <code>background</code>. Warna terang atas latar gelap memberi kesan terbaik.","Kurangkan <code>blur(50px)</code> untuk bentuk lebih jelas, naikkan untuk lebih lembut. Pada peranti lama, kurangkan bilangan bulatan."]},
+
+{cat:"Latar Belakang",lvl:"Pertengahan",title:"Cahaya sorotan ikut kursor",use:"Latar hero atau kad yang bertindak balas bila pengguna gerak kursor atau jari, contohnya halaman produk atau portfolio.",desc:"Lampu limau mengikut kursor dan mendedahkan corak titik di bawahnya. Berfungsi dengan tetikus dan sentuhan.",
+html:`<div class="spot" id="spot">
+  <p>Gerakkan kursor atau jari</p> <!-- UBAH: kandungan di atas latar -->
+</div>`,
+css:`.spot{position:fixed;inset:0;--x:50%;--y:50%;background:#0a0a0a; /* UBAH: warna latar */ display:grid;
+  place-items:center;color:#fff;font-family:system-ui,sans-serif;
+  touch-action:pan-y;overflow:hidden}
+.spot::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(#ffffff 1px,transparent 1px) 0 0/22px 22px;
+  -webkit-mask:radial-gradient(circle 130px at var(--x) var(--y),#000,transparent);
+  mask:radial-gradient(circle 130px at var(--x) var(--y),#000,transparent)}
+.spot::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle 150px at var(--x) var(--y),rgba(214,242,63,.35),transparent 70%)} /* UBAH: saiz dan warna cahaya */
+.spot p{position:relative;z-index:1;margin:0;font-weight:600;opacity:.85}`,
+js:`var spot=document.getElementById('spot');
+spot.addEventListener('pointermove',function(e){
+  var r=spot.getBoundingClientRect();
+  spot.style.setProperty('--x',(e.clientX-r.left)+'px');
+  spot.style.setProperty('--y',(e.clientY-r.top)+'px');
+});`,
+steps:["Salin HTML, CSS dan JS. JS hanya mengemas kini dua pembolehubah, <code>--x</code> dan <code>--y</code>.","Tukar warna cahaya pada <code>rgba(214,242,63,.35)</code> dan saiz pada <code>150px</code>.","<code>touch-action:pan-y</code> membenarkan pengguna scroll halaman dengan jari tanpa terhalang."]},
+
+{cat:"Latar Belakang",lvl:"Terkini",title:"Kad tilt 3D",use:"Kad produk, kad profil atau kad promosi yang mahu nampak premium dan bertindak balas bila disentuh.",desc:"Kad condong ikut kedudukan kursor atau jari, dengan kilatan cahaya yang bergerak sekali.",
+html:`<div class="scene">
+  <div class="tilt" id="tilt">
+    <b>Tilt 3D</b> <!-- UBAH: tajuk kad -->
+    <span>Gerakkan kursor atau jari</span>
+  </div>
+</div>`,
+css:`.scene{perspective:700px;font-family:system-ui,sans-serif}
+.tilt{position:relative;box-sizing:border-box;width:230px;height:290px; /* UBAH: saiz kad */ border-radius:24px;
+  background:linear-gradient(145deg,#2fd16b,#f7e93c); /* UBAH: warna kad */ color:#0a0a0a;
+  display:flex;flex-direction:column;justify-content:flex-end;padding:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,.2);touch-action:pan-y;
+  transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+  transition:transform .15s ease-out}
+.tilt::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.5),transparent 55%)}
+.tilt b{font-size:1.6rem}
+.tilt span{opacity:.7;font-size:.9rem}`,
+js:`var t=document.getElementById('tilt');
+t.addEventListener('pointermove',function(e){
+  var r=t.getBoundingClientRect();
+  var x=(e.clientX-r.left)/r.width;
+  var y=(e.clientY-r.top)/r.height;
+  t.style.setProperty('--ry',((x-.5)*24)+'deg');
+  t.style.setProperty('--rx',((.5-y)*24)+'deg');
+  t.style.setProperty('--gx',(x*100)+'%');
+  t.style.setProperty('--gy',(y*100)+'%');
+});
+t.addEventListener('pointerleave',function(){
+  t.style.setProperty('--rx','0deg');
+  t.style.setProperty('--ry','0deg');
+});`,
+steps:["Salin HTML, CSS dan JS.","Ubah kekuatan condong dengan nombor <code>24</code> dalam JS (darjah maksimum).","Letak kandungan sebenar (gambar, tajuk, harga) di dalam <code>.tilt</code>."]},
+
+{cat:"Latar Belakang",lvl:"Pertengahan",title:"Kiub 3D berputar",use:"Elemen hiasan hero, pemuat (loader) atau ikon besar yang menunjukkan konsep 3D dengan CSS sahaja.",desc:"Enam muka dibina dengan transform 3D, berputar tanpa henti dan berhenti bila di-hover. Tiada library, tiada JavaScript.",
+html:`<div class="scene3d">
+  <div class="cube">
+    <i>Depan</i><i>Belakang</i><i>Kiri</i> <!-- UBAH: teks setiap muka; boleh ganti dengan gambar -->
+    <i>Kanan</i><i>Atas</i><i>Bawah</i>
+  </div>
+</div>`,
+css:`.scene3d{perspective:600px;font-family:system-ui,sans-serif}
+.cube{width:120px;height:120px; /* UBAH: saiz kiub; translateZ pada muka mesti separuh */ position:relative;transform-style:preserve-3d;
+  animation:spin 10s linear infinite} /* UBAH: kelajuan putaran */
+.scene3d:hover .cube{animation-play-state:paused}
+.cube i{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;
+  font-weight:700;color:#0a0a0a;border:2px solid #0a0a0a;border-radius:12px}
+.cube i:nth-child(1){background:#2fd16b;transform:translateZ(60px)}
+.cube i:nth-child(2){background:#f7e93c;transform:rotateY(180deg) translateZ(60px)}
+.cube i:nth-child(3){background:#8fd3ff;transform:rotateY(-90deg) translateZ(60px)}
+.cube i:nth-child(4){background:#ffb3cb;transform:rotateY(90deg) translateZ(60px)}
+.cube i:nth-child(5){background:#d6f23f;transform:rotateX(90deg) translateZ(60px)}
+.cube i:nth-child(6){background:#ffd9a8;transform:rotateX(-90deg) translateZ(60px)}
+@keyframes spin{
+  from{transform:rotateX(-20deg) rotateY(0deg)}
+  to{transform:rotateX(-20deg) rotateY(360deg)}
+}
+@media(prefers-reduced-motion:reduce){.cube{animation:none;transform:rotateX(-20deg) rotateY(30deg)}}`,
+js:"",
+steps:["Salin HTML dan CSS. Tiada JavaScript diperlukan.","Saiz kiub ditentukan oleh <code>120px</code>, dan <code>translateZ(60px)</code> mesti separuh daripada saiz itu. Ubah kedua-duanya serentak.","Ganti teks dalam setiap <code>&lt;i&gt;</code> dengan gambar atau ikon."]},
+
+{cat:"Interaktif",lvl:"Asas",title:"Collapse box (accordion)",use:"Bahagian Soalan Lazim (FAQ), terma dan syarat, atau kandungan panjang yang perlu disorok dulu.",desc:"Klik soalan untuk buka atau tutup jawapan. Ketinggian beranimasi dengan trik grid 0fr ke 1fr, tanpa kira berapa panjang kandungan.",
+html:`<div class="acc">
+  <div class="it open">
+    <button class="q">Apa itu CSS grid?<i></i></button> <!-- UBAH: soalan; salin seluruh .it untuk tambah -->
+    <div class="a"><div><p>Sistem susun atur dua dimensi: baris dan lajur sekali gus.</p> <!-- UBAH: jawapan --> </div></div>
+  </div>
+  <div class="it">
+    <button class="q">Bila guna flexbox?<i></i></button>
+    <div class="a"><div><p>Bila nak susun item dalam satu baris atau satu lajur sahaja.</p></div></div>
+  </div>
+  <div class="it">
+    <button class="q">Perlu tahu JavaScript?<i></i></button>
+    <div class="a"><div><p>Tidak untuk layout. JS hanya untuk interaksi seperti ini.</p></div></div>
+  </div>
+</div>`,
+css:`.acc{width:min(94%,380px);font-family:system-ui,sans-serif}
+.it{border:2px solid #101828;border-radius:12px;margin-bottom:8px; /* UBAH: warna sempadan dan jarak antara item */ overflow:hidden;background:#fff}
+.q{width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:13px 14px;background:none;border:0;font:inherit;font-weight:600;
+  cursor:pointer;text-align:left}
+.q i{width:10px;height:10px;border-right:2.5px solid #101828;border-bottom:2.5px solid #101828;
+  rotate:45deg;transition:rotate .3s}
+.open .q i{rotate:225deg}
+.a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s} /* UBAH: kelajuan buka dan tutup */
+.open .a{grid-template-rows:1fr}
+.a>div{overflow:hidden}
+.a p{margin:0;padding:0 14px 14px;color:#5b667a;line-height:1.5}`,
+js:`document.querySelectorAll('.q').forEach(function(b){
+  b.onclick=function(){b.parentNode.classList.toggle('open')};
+});`,
+steps:["Salin HTML, CSS dan JS. Satu <code>.it</code> ialah satu soalan.","Nak hanya satu terbuka pada satu masa? Buang class <code>open</code> daripada semua <code>.it</code> dahulu sebelum <code>toggle</code> dalam JS."]},
+
+{cat:"Asas",lvl:"Asas",title:"Gambar profil (avatar)",use:"Profil pengguna, senarai pelajar, ruang komen atau paparan ahli pasukan.",desc:"Avatar bulat dengan inisial, gelang pilihan, titik status dan susunan kumpulan. Siap untuk ditukar kepada gambar sebenar.",
+html:`<div class="box">
+  <div class="row">
+    <div class="av a1 ring">SA<span class="dot"></span></div> <!-- UBAH: inisial; atau tukar kepada gambar (lihat CSS) -->
+    <div class="av a2">HK</div>
+    <div class="av a3">NI</div>
+  </div>
+  <div class="stack">
+    <div class="av a1">SA</div>
+    <div class="av a2">HK</div>
+    <div class="av a3">NI</div>
+    <div class="av more">+5</div>
+  </div>
+</div>`,
+css:`.box{display:grid;gap:28px;justify-items:center;font-family:system-ui,sans-serif}
+.row{display:flex;gap:18px}
+.av{width:72px;height:72px; /* UBAH: saiz avatar */ border-radius:50%;display:grid;place-items:center;
+  color:#fff;font-weight:700;font-size:1.3rem;position:relative;
+  background-size:cover;background-position:center}
+.a1{background-image:linear-gradient(135deg,#ff7a59,#ff5fa2)} /* UBAH: warna gradient, atau url(gambar.jpg) untuk foto */
+.a2{background-image:linear-gradient(135deg,#3b5bff,#38c59a)}
+.a3{background-image:linear-gradient(135deg,#8a6bff,#3b9eff)}
+.ring{box-shadow:0 0 0 3px #fff,0 0 0 6px #3b5bff} /* UBAH: warna gelang */
+.dot{position:absolute;right:1px;bottom:1px;width:18px;height:18px;border-radius:50%;
+  background:#1fa971; /* UBAH: warna titik status */ border:3px solid #fff}
+.stack{display:flex}
+.stack .av{width:48px;height:48px;font-size:.95rem;border:3px solid #fff;margin-left:-14px}
+.stack .av:first-child{margin-left:0}
+.more{background:#101828}`,
+js:"",
+steps:["Salin HTML dan CSS.","Nak guna gambar? Tambah pada elemen: <code>style=\"background-image:url(gambar.jpg)\"</code> dan buang teks inisial.","Gelang <code>.ring</code> dan titik <code>.dot</code> adalah pilihan. Buang kalau tak perlu."]},
+
+{cat:"Interaktif",lvl:"Pertengahan",title:"Loading screen",use:"Bila laman atau aplikasi ambil masa untuk muat, supaya pengguna tahu sesuatu sedang berlaku.",desc:"Skrin muat dengan pemutar dan bar peratus, lalu pudar bila siap. Tekan Muat semula untuk tengok ulang.",
+html:`<div class="stage">
+  <div class="load" id="load">
+    <div class="spin"></div>
+    <p id="pct">0%</p>
+    <div class="bar"><i id="fill"></i></div>
+  </div>
+  <div class="page">
+    <h3>Selamat datang</h3> <!-- UBAH: kandungan halaman kau -->
+    <button id="again">Muat semula</button>
+  </div>
+</div>`,
+css:`.stage{position:fixed;inset:0;font-family:system-ui,sans-serif}
+.load{position:absolute;inset:0;z-index:2;background:#101828;color:#fff; /* UBAH: warna skrin loading */
+  display:grid;place-content:center;justify-items:center;gap:12px;
+  transition:opacity .5s,visibility .5s}
+.load.done{opacity:0;visibility:hidden}
+.load p{margin:0;font-weight:600}
+.spin{width:44px;height:44px;border:4px solid #33425f;border-top-color:#ffe45c; /* UBAH: warna pemutar */
+  border-radius:50%;animation:s .9s linear infinite} /* UBAH: kelajuan pemutar */
+@keyframes s{to{rotate:360deg}}
+.bar{width:180px;height:6px;background:#33425f;border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#ffe45c} /* UBAH: warna bar kemajuan */
+.page{height:100%;display:grid;place-content:center;justify-items:center;gap:12px;background:#fff;color:#101828}
+.page h3{margin:0}
+.page button{background:#3b5bff;color:#fff;border:0;border-radius:9px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}`,
+js:`var load=document.getElementById('load');
+var fill=document.getElementById('fill');
+var pct=document.getElementById('pct');
+var t;
+function run(){
+  var p=0;
+  clearInterval(t);
+  load.classList.remove('done');
+  t=setInterval(function(){
+    p+=Math.random()*14+4;
+    if(p>=100){p=100;clearInterval(t);setTimeout(function(){load.classList.add('done')},300)}
+    fill.style.width=p+'%';
+    pct.textContent=Math.floor(p)+'%';
+  },200);
+}
+document.getElementById('again').onclick=run;
+run();`,
+steps:["Letak <code>.load</code> di atas halaman kau (<code>position:fixed;inset:0</code>).","Untuk laman sebenar, buang <code>run()</code> dan guna: <code>window.addEventListener('load',function(){load.classList.add('done')})</code>.","Tukar warna pemutar pada <code>border-top-color</code>."]},
+
+{cat:"Form",lvl:"Pertengahan",title:"Slider julat bergradient",use:"Tetapan di mana pengguna pilih nilai dalam satu julat: kecerahan, kelantangan, julat harga atau saiz tulisan.",desc:"Input range dengan trek yang terisi warna gradient mengikut nilai. Nilai dipaparkan terus.",
+html:`<div class="rg">
+  <label for="r">Kecerahan <b id="v">60</b></label> <!-- UBAH: nama tetapan -->
+  <input id="r" type="range" min="0" max="100" value="60"> <!-- UBAH: julat (min, max) dan nilai awal -->
+</div>`,
+css:`.rg{width:min(90%,340px);font-family:system-ui,sans-serif}
+.rg label{display:flex;justify-content:space-between;font-weight:600;margin-bottom:14px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:12px;
+  border-radius:99px;outline:0;
+  background:linear-gradient(90deg,#3b5bff,#ff5fa2) 0 0/var(--p,60%) 100% no-repeat,#e3e7f0} /* UBAH: warna gradient di atas, dan warna trek kosong (#e3e7f0) */
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;box-sizing:border-box;
+  width:28px;height:28px;border-radius:50%;background:#fff;border:4px solid #3b5bff; /* UBAH: warna bulatan */
+  cursor:grab;box-shadow:0 3px 8px rgba(0,0,0,.25)}
+input[type=range]::-moz-range-thumb{box-sizing:border-box;width:28px;height:28px;
+  border-radius:50%;background:#fff;border:4px solid #3b5bff;cursor:grab}`,
+js:`var r=document.getElementById('r');
+var v=document.getElementById('v');
+function u(){r.style.setProperty('--p','calc('+r.value+'% + '+(14-r.value*0.28)+'px)');v.textContent=r.value}
+r.oninput=u;
+u();`,
+steps:["Salin ketiga-tiga bahagian.","Tukar warna gradient pada baris <code>linear-gradient(90deg,...)</code>.","Ubah julat dengan atribut <code>min</code>, <code>max</code> dan <code>value</code> pada input."]},
+
+{cat:"Interaktif",lvl:"Pertengahan",title:"Klik kotak jadi besar",use:"Menu kategori, galeri portfolio atau bahagian ciri produk yang tunjuk butiran bila dipilih.",desc:"Panel yang mengembang bila diklik, manakala yang lain mengecil. Satu CSS flex, satu baris JS.",
+html:`<div class="pn">
+  <div class="p on" style="--c:#ff7a59"><b>Potret</b><span>Foto muka dan watak.</span></div> <!-- UBAH: warna (--c), tajuk dan penerangan; salin untuk tambah panel -->
+  <div class="p" style="--c:#3b5bff"><b>Alam</b><span>Gunung, laut, hutan.</span></div>
+  <div class="p" style="--c:#38c59a"><b>Jalanan</b><span>Hidup harian di bandar.</span></div>
+  <div class="p" style="--c:#8a6bff"><b>Malam</b><span>Cahaya dan bintang.</span></div>
+</div>`,
+css:`.pn{display:flex;gap:8px;width:min(92vw,420px);height:230px; /* UBAH: tinggi panel */ font-family:system-ui,sans-serif}
+.p{flex:1;background:var(--c);border-radius:16px;color:#fff;padding:14px;
+  display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;
+  cursor:pointer;transition:flex .5s cubic-bezier(.2,.8,.2,1)} /* UBAH: kelajuan animasi */
+.p.on{flex:4} /* UBAH: nisbah lebar panel yang terbuka */
+.p b{white-space:nowrap}
+.p:not(.on) b{writing-mode:vertical-rl;rotate:180deg}
+.p:focus-visible{outline:3px solid #101828;outline-offset:2px}
+.p span{white-space:nowrap;max-height:0;opacity:0;transition:.4s}
+.p.on span{white-space:normal;max-height:60px;opacity:1;transition-delay:.2s}`,
+js:`var ps=document.querySelectorAll('.p');
+ps.forEach(function(p){
+  p.tabIndex=0;
+  p.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();p.click()}};
+  p.onclick=function(){
+    ps.forEach(function(x){x.classList.toggle('on',x===p)});
+  };
+});`,
+steps:["Salin HTML, CSS dan JS. Satu <code>.p</code> ialah satu panel.","Tukar warna dengan <code>--c</code> pada setiap panel.","Ubah nisbah saiz pada <code>.p.on{flex:4}</code>. Nombor lebih besar, panel lebih lebar."]},
+
+{cat:"Form",lvl:"Asas",title:"Toggle switch",use:"Halaman tetapan: hidupkan notifikasi, mod gelap atau langganan e-mel.",desc:"Suis hidup/mati dibuat daripada checkbox biasa, jadi masih boleh guna keyboard dan skrin pembaca.",
+html:`<div>
+  <label class="sw"><input id="nt" type="checkbox" checked><span class="tr"></span>Notifikasi</label> <!-- UBAH: teks label -->
+  <label class="sw"><input id="dk" type="checkbox"><span class="tr"></span>Mod gelap</label>
+  <p id="st">Notifikasi: hidup</p>
+</div>`,
+css:`.sw{position:relative;display:flex;align-items:center;gap:12px;margin:12px 0;
+  font-family:system-ui,sans-serif;font-weight:600;cursor:pointer}
+.sw input{position:absolute;opacity:0}
+.tr{width:52px;height:30px; /* UBAH: saiz suis; ubah bulatan 24px dan translate 22px sekali */ border-radius:99px;background:#c5cce0; /* UBAH: warna bila mati */
+  position:relative;flex:none;transition:background .25s}
+.tr::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;
+  border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.3);
+  transition:translate .25s}
+.sw input:checked+.tr{background:#3b5bff} /* UBAH: warna bila hidup */
+.sw input:checked+.tr::after{translate:22px 0}
+.sw input:focus-visible+.tr{outline:3px solid #ffe45c;outline-offset:2px}
+body{transition:background .3s,color .3s}
+body.dark{background:#101828;color:#fff} /* UBAH: warna mod gelap */
+#st{margin:14px 0 0;opacity:.7;font:500 .9rem system-ui,sans-serif}`,
+js:`var nt=document.getElementById('nt');
+var dk=document.getElementById('dk');
+var st=document.getElementById('st');
+nt.onchange=function(){st.textContent='Notifikasi: '+(nt.checked?'hidup':'mati')};
+dk.onchange=function(){document.body.classList.toggle('dark',dk.checked)};`,
+steps:["Salin HTML, CSS dan JS. Suis itu sendiri tak perlukan JS, tapi tindakannya (contoh mod gelap) perlukan.","Nak tahu status? Baca <code>input.checked</code> (true atau false). Letak tindakan kau dalam <code>onchange</code>."]},
+
+{cat:"Kreatif",lvl:"Terkini",title:"Kad kaca (glassmorphism)",use:"Kad harga, borang log masuk atau panel maklumat di atas gambar atau latar berwarna.",desc:"Kad lutsinar dengan latar belakang kabur. Kesan ini hanya nampak bila ada warna atau bentuk di belakangnya.",
+html:`<div class="scene">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="glass">
+    <b>Kad kaca</b> <!-- UBAH: teks kad -->
+    <p>Latar belakang di belakang kad ini dikaburkan.</p>
+  </div>
+</div>`,
+css:`.scene{position:fixed;inset:0;background:#101828; /* UBAH: warna latar (kaca hanya nampak bila ada warna di belakang) */ overflow:hidden;
+  display:grid;place-items:center;font-family:system-ui,sans-serif}
+.orb{position:absolute;border-radius:50%}
+.o1{width:150px;height:150px;background:#ff5fa2;top:30px;left:40px; /* UBAH: warna dan kedudukan bulatan */
+  animation:fl 6s ease-in-out infinite alternate}
+.o2{width:120px;height:120px;background:#3b9eff;bottom:30px;right:50px;
+  animation:fl 7s ease-in-out infinite alternate-reverse}
+@keyframes fl{to{translate:40px -30px}}
+.glass{position:relative;width:min(80%,260px);padding:22px;border-radius:20px;color:#fff;
+  background:rgba(255,255,255,.14); /* UBAH: kelutsinaran kaca */ border:1px solid rgba(255,255,255,.35);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)} /* UBAH: tahap kabur */
+.glass p{margin:6px 0 0;opacity:.85;line-height:1.5}
+@media(prefers-reduced-motion:reduce){.orb{animation:none}}`,
+js:"",
+steps:["Salin HTML dan CSS. Kuncinya ialah <code>backdrop-filter:blur()</code>.","Letak kad di atas latar yang berwarna atau bergambar, kalau tidak kesan kaca tak kelihatan."]},
+
+{cat:"Interaktif",lvl:"Pertengahan",title:"Dropdown custom",use:"Borang pendaftaran, pilihan kursus, bahasa atau negara, dan tapisan senarai.",desc:"Ganti select biasa dengan menu yang boleh diubah suai. Tutup bila klik di luar atau tekan Escape.",
+html:`<div class="dd" id="dd">
+  <button class="dd-btn" aria-haspopup="listbox" aria-expanded="false">
+    <span id="ddLabel">Pilih kursus</span> <!-- UBAH: teks awal -->
+    <svg viewBox="0 0 20 20" width="16" height="16"><path d="M5 7l5 6 5-6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+  </button>
+  <ul class="dd-list" role="listbox">
+    <li role="option">Fotografi Digital</li> <!-- UBAH: pilihan; salin baris untuk tambah -->
+    <li role="option">Reka Bentuk Web</li>
+    <li role="option">Animasi 2D</li>
+    <li role="option">Penyuntingan Video</li>
+  </ul>
+</div>`,
+css:`.dd{position:relative;width:250px; /* UBAH: lebar dropdown */ font-family:system-ui,sans-serif}
+.dd-btn{width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;border:2px solid #101828;border-radius:12px;background:#fff;
+  font:inherit;font-weight:600;cursor:pointer}
+.dd-btn svg{transition:transform .25s}
+.dd.open .dd-btn svg{transform:rotate(180deg)}
+.dd-list{list-style:none;margin:8px 0 0;padding:6px;position:absolute;inset-inline:0;
+  background:#fff;border:2px solid #101828;border-radius:12px;
+  box-shadow:6px 6px 0 #3b5bff; /* UBAH: warna bayang */ opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .2s,transform .2s}
+.dd.open .dd-list{opacity:1;transform:none;pointer-events:auto}
+.dd-list li{padding:10px 12px;border-radius:8px;cursor:pointer}
+.dd-list li:hover{background:#ffe45c} /* UBAH: warna bila hover */ `,
+js:`var dd=document.getElementById('dd');
+var btn=dd.querySelector('.dd-btn');
+function setOpen(o){dd.classList.toggle('open',o);btn.setAttribute('aria-expanded',o)}
+btn.addEventListener('click',function(){setOpen(!dd.classList.contains('open'))});
+dd.querySelectorAll('li').forEach(function(li){
+  li.tabIndex=0;
+  li.addEventListener('keydown',function(e){if(e.key==='Enter')li.click()});
+  li.addEventListener('click',function(){
+    document.getElementById('ddLabel').textContent=li.textContent;
+    setOpen(false);
+  });
+});
+document.addEventListener('click',function(e){if(!dd.contains(e.target))setOpen(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false)});`,
+steps:["Tampal HTML, CSS dan JS dalam halaman yang sama.","Tambah atau buang <code>&lt;li&gt;</code> untuk tukar pilihan.","Nak baca nilai pilihan? Guna <code>document.getElementById('ddLabel').textContent</code>."]},
+
+{cat:"Interaktif",lvl:"Pertengahan",title:"Slider dengan animasi",use:"Banner utama di halaman depan, ulasan pelanggan, promosi atau pameran gambar.",desc:"Slider auto-main dengan butang, titik penunjuk dan kandungan yang naik bila slide bertukar. Berhenti bila hover.",
+html:`<div class="sl" id="sl">
+  <div class="sl-track">
+    <div class="sl-s s1"><h3>Cahaya pagi</h3><p>Slide pertama</p></div> <!-- UBAH: tajuk dan teks slide; salin untuk tambah slide -->
+    <div class="sl-s s2"><h3>Warna petang</h3><p>Slide kedua</p></div>
+    <div class="sl-s s3"><h3>Malam kota</h3><p>Slide ketiga</p></div>
+  </div>
+  <button class="sl-b prev" aria-label="Sebelum">&#8249;</button>
+  <button class="sl-b next" aria-label="Seterusnya">&#8250;</button>
+  <div class="sl-dots"></div>
+</div>`,
+css:`.sl{position:relative;width:min(92%,420px);height:230px; /* UBAH: tinggi slider */ border-radius:18px;overflow:hidden;font-family:system-ui,sans-serif}
+.sl-track{display:flex;height:100%;transition:transform .7s cubic-bezier(.7,0,.2,1)} /* UBAH: kelajuan peralihan */
+.sl-s{min-width:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:24px;color:#fff}
+.sl-s h3{margin:0;font-size:1.6rem;transform:translateY(16px);opacity:0;transition:.6s .3s}
+.sl-s p{margin:2px 0 0;opacity:0;transition:.6s .45s}
+.sl-s.on h3{transform:none;opacity:1}
+.sl-s.on p{opacity:.85}
+.s1{background:linear-gradient(135deg,#ff9a56,#ff5e7e)} /* UBAH: gradient slide; atau background:url(gambar.jpg) center/cover */
+.s2{background:linear-gradient(135deg,#6a5cff,#2bb3ff)}
+.s3{background:linear-gradient(135deg,#142850,#27496d)}
+.sl-b{position:absolute;top:50%;translate:0 -50%;width:38px;height:38px;border:0;border-radius:50%;
+  background:rgba(255,255,255,.9);font-size:1.5rem;cursor:pointer}
+.prev{left:10px}.next{right:10px}
+.sl-dots{position:absolute;top:12px;right:14px;display:flex;gap:6px}
+.sl-dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:.3s}
+.sl-dots i.on{width:22px;border-radius:6px;background:#fff}`,
+js:`var sl=document.getElementById('sl');
+var track=sl.querySelector('.sl-track');
+var slides=sl.querySelectorAll('.sl-s');
+var dots=sl.querySelector('.sl-dots');
+var n=0,timer;
+slides.forEach(function(_,i){
+  var d=document.createElement('i');
+  d.onclick=function(){go(i)};
+  dots.appendChild(d);
+});
+function go(i){
+  n=(i+slides.length)%slides.length;
+  track.style.transform='translateX(-'+n*100+'%)';
+  slides.forEach(function(s,k){s.classList.toggle('on',k===n)});
+  dots.querySelectorAll('i').forEach(function(d,k){d.classList.toggle('on',k===n)});
+}
+function play(){clearInterval(timer);timer=setInterval(function(){go(n+1)},3500)}
+sl.querySelector('.prev').onclick=function(){go(n-1)};
+sl.querySelector('.next').onclick=function(){go(n+1)};
+var x0=null;
+sl.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+sl.addEventListener('touchend',function(e){
+  if(x0===null)return;
+  var dx=e.changedTouches[0].clientX-x0;
+  if(Math.abs(dx)>40)go(n+(dx<0?1:-1));
+  x0=null;
+});
+sl.addEventListener('pointerenter',function(e){if(e.pointerType==='mouse')clearInterval(timer)});
+sl.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')play()});
+go(0);play();`,
+steps:["Salin ketiga-tiga bahagian ke projek.","Untuk gambar sebenar, ganti gradient dengan <code>background:url(gambar.jpg) center/cover</code> pada <code>.s1</code>, <code>.s2</code>, <code>.s3</code>.","Tukar kelajuan dengan nombor <code>3500</code> (milisaat). Tambah slide dengan menyalin satu <code>.sl-s</code>."]},
+
+{cat:"Galeri",lvl:"Terkini",title:"Galeri bulat 3D yang boleh diputar",use:"Pameran portfolio fotografi atau reka bentuk, halaman produk, atau bahagian pembuka yang nak nampak hebat.",desc:"Kad tersusun dalam bulatan 3D. Seret dengan jari atau tetikus, atau guna butang.",
+html:`<div class="scene" id="scene">
+  <div class="ring" id="ring">
+    <div class="face" style="--c:#ff7a59">Potret</div> <!-- UBAH: warna (--c) dan teks setiap muka -->
+    <div class="face" style="--c:#ffb84d">Alam</div>
+    <div class="face" style="--c:#38c59a">Jalanan</div>
+    <div class="face" style="--c:#3b9eff">Seni bina</div>
+    <div class="face" style="--c:#8a6bff">Makro</div>
+    <div class="face" style="--c:#ff5fa2">Malam</div>
+  </div>
+  <div class="ctrl">
+    <button id="l" aria-label="Putar kiri">&#8249;</button>
+    <button id="r" aria-label="Putar kanan">&#8250;</button>
+  </div>
+</div>`,
+css:`.scene{width:100%;height:320px;perspective:900px;display:grid;place-items:center;
+  font-family:system-ui,sans-serif;touch-action:pan-y;cursor:grab;position:relative;user-select:none;-webkit-user-select:none}
+.ring{width:120px;height:160px; /* UBAH: saiz kad */ position:relative;transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.ring.drag{transition:none}
+.face{position:absolute;inset:0;border-radius:14px;background:var(--c);color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:1.1rem;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.35);backface-visibility:hidden}
+.face:nth-child(1){transform:rotateY(0deg) translateZ(150px)} /* UBAH: translateZ = jejari bulatan; ubah kesemua enam serentak */
+.face:nth-child(2){transform:rotateY(60deg) translateZ(150px)}
+.face:nth-child(3){transform:rotateY(120deg) translateZ(150px)}
+.face:nth-child(4){transform:rotateY(180deg) translateZ(150px)}
+.face:nth-child(5){transform:rotateY(240deg) translateZ(150px)}
+.face:nth-child(6){transform:rotateY(300deg) translateZ(150px)}
+.ctrl{position:absolute;bottom:8px;display:flex;gap:10px}
+.ctrl button{width:40px;height:40px;border-radius:50%;border:2px solid #101828;background:#fff;font-size:1.4rem;cursor:pointer}`,
+js:`var scene=document.getElementById('scene');
+var ring=document.getElementById('ring');
+var rot=0,startX=0,startRot=0,down=false;
+function set(){ring.style.transform='rotateY('+rot+'deg)'}
+document.getElementById('l').onclick=function(){rot+=60;set()};
+document.getElementById('r').onclick=function(){rot-=60;set()};
+scene.addEventListener('pointerdown',function(e){
+  down=true;startX=e.clientX;startRot=rot;ring.classList.add('drag');
+});
+window.addEventListener('pointermove',function(e){
+  if(!down)return;
+  rot=startRot+(e.clientX-startX)*0.5;set();
+});
+window.addEventListener('pointerup',function(){
+  if(!down)return;
+  down=false;ring.classList.remove('drag');
+  rot=Math.round(rot/60)*60;set();
+});`,
+steps:["Salin HTML, CSS dan JS. Setiap <code>.face</code> ialah satu kad.","Untuk gambar, letak <code>background:url(...) center/cover</code> pada <code>.face</code>.","Tambah kad? Ubah sudut: 8 kad = <code>45deg</code> setiap satu, dan tukar <code>60</code> dalam JS kepada <code>45</code>."]}
+];
+
+var icon='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg>';
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+var AN={kucing:{bg:'#ffd7a8',f:'#f5a45d',ear:'p',nose:'#e0607e',ex:'w'},anjing:{bg:'#cfe6ff',f:'#d9b38c',ear:'d',nose:'#3b2f2f',ex:''},arnab:{bg:'#ffe0ef',f:'#ffffff',ear:'l',nose:'#ff8fb1',ex:'w'},panda:{bg:'#d9f2e3',f:'#ffffff',ear:'r',nose:'#222',ex:'e'},rubah:{bg:'#fff0c9',f:'#f08a3c',ear:'p',nose:'#222',ex:'m'},beruang:{bg:'#e5dcff',f:'#a9795a',ear:'r',nose:'#222',ex:''}};
+function ph(n){
+  var a=AN[n]||AN.kucing,e=(n==='panda')?'#222':a.f;
+  var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><rect width="300" height="300" fill="'+a.bg+'"/>';
+  if(a.ear==='p')s+='<path d="M70 120L85 40L130 85ZM230 120L215 40L170 85Z" fill="'+a.f+'"/>';
+  if(a.ear==='r')s+='<circle cx="80" cy="85" r="34" fill="'+e+'"/><circle cx="220" cy="85" r="34" fill="'+e+'"/>';
+  if(a.ear==='l')s+='<ellipse cx="108" cy="55" rx="20" ry="52" fill="'+a.f+'"/><ellipse cx="192" cy="55" rx="20" ry="52" fill="'+a.f+'"/><ellipse cx="108" cy="58" rx="9" ry="36" fill="#ffb3cb"/><ellipse cx="192" cy="58" rx="9" ry="36" fill="#ffb3cb"/>';
+  if(a.ear==='d')s+='<ellipse cx="64" cy="135" rx="26" ry="50" fill="#8a5a3c" transform="rotate(15 64 135)"/><ellipse cx="236" cy="135" rx="26" ry="50" fill="#8a5a3c" transform="rotate(-15 236 135)"/>';
+  s+='<ellipse cx="150" cy="165" rx="95" ry="85" fill="'+a.f+'"/>';
+  if(a.ex==='e')s+='<ellipse cx="110" cy="150" rx="22" ry="28" fill="#222" transform="rotate(20 110 150)"/><ellipse cx="190" cy="150" rx="22" ry="28" fill="#222" transform="rotate(-20 190 150)"/>';
+  if(a.ex==='m')s+='<path d="M55 175Q150 225 245 175Q215 245 150 250Q85 245 55 175Z" fill="#fff"/>';
+  var ec=(a.ex==='e')?'#fff':'#222';
+  s+='<circle cx="112" cy="150" r="9" fill="'+ec+'"/><circle cx="188" cy="150" r="9" fill="'+ec+'"/>';
+  s+='<ellipse cx="150" cy="185" rx="14" ry="10" fill="'+a.nose+'"/><path d="M150 195Q150 212 136 214M150 195Q150 212 164 214" stroke="#222" stroke-width="4" fill="none" stroke-linecap="round"/>';
+  if(a.ex==='w')s+='<path d="M60 180H105M62 198L105 192M240 180H195M238 198L195 192" stroke="#333" stroke-width="3" stroke-linecap="round"/>';
+  return 'data:image/svg+xml;utf8,'+encodeURIComponent(s+'</svg>');
+}
+function doc(c,p){
+  return '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{height:100%}body{margin:0;display:grid;place-items:center;background:#f3f6e4;color:#101828;overflow:hidden}'+c.css+'</style><body>'+(p?c.html.replace(/gambar.([a-z]+)\.jpg/g,function(_,n){return ph(n)}):c.html)+(c.js?'<scr'+'ipt>'+c.js+'</scr'+'ipt>':'')+(p?'<scr'+'ipt>document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.getAttribute("href")==="#")e.preventDefault()})</scr'+'ipt>':'');
+}
+function full(c){
+  return '<!doctype html>\n<html lang="ms">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Komponen</title>\n<style>\n'+c.css+'\n</style>\n</head>\n<body>\n'+c.html+(c.js?'\n<scr'+'ipt>\n'+c.js+'\n</scr'+'ipt>':'')+'\n</body>\n</html>';
+}
+function flash(b){if(b.dataset.busy)return;b.dataset.busy=1;var o=b.innerHTML;b.classList.add('ok');b.innerHTML='Disalin';setTimeout(function(){b.classList.remove('ok');b.innerHTML=o;delete b.dataset.busy},1400)}
+function copy(text,b){
+  function done(){flash(b)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fallback)}else fallback();
+  function fallback(){var t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(e){}t.remove();done()}
+}
+function build(c){
+  var tabs=['html','css'];if(c.js)tabs.push('js');
+  var el=document.createElement('article');el.className='item';el.dataset.cat=c.cat;
+  el.innerHTML='<header><h2>'+c.title+'<span class="lvl">'+c.lvl+'</span></h2><p>'+c.desc+'</p>'+(c.use?'<p class="use"><b>Guna untuk:</b> '+c.use+'</p>':'')+'</header>'+
+  '<div class="grid"><div class="prev"><iframe sandbox="allow-scripts" title="Pratonton '+c.title+'" loading="lazy"></iframe></div>'+
+  '<div class="codebox"><div class="bar" role="tablist"></div><pre tabindex="0"></pre></div></div>'+
+  '<div class="steps"><h3>Cara guna</h3><ol>'+c.steps.map(function(s){return '<li>'+s+'</li>'}).join('')+'</ol></div>';
+  el.querySelector('iframe').srcdoc=doc(c,1);
+  var bar=el.querySelector('.bar'),pre=el.querySelector('pre'),cur='html';
+  function show(k){cur=k;pre.textContent=c[k];bar.querySelectorAll('.tab').forEach(function(t){t.setAttribute('aria-selected',t.dataset.k===k)})}
+  tabs.forEach(function(k){var b=document.createElement('button');b.className='tab';b.dataset.k=k;b.setAttribute('role','tab');b.textContent=k.toUpperCase();b.onclick=function(){show(k);el.classList.add('open');tg.textContent='Sembunyi kod'};bar.appendChild(b)});
+  var sp=document.createElement('span');sp.className='sp';bar.appendChild(sp);
+  var tg=document.createElement('button');tg.className='tab tg';tg.textContent='Papar kod';
+  tg.onclick=function(){var o=el.classList.toggle('open');tg.textContent=o?'Sembunyi kod':'Papar kod'};
+  bar.insertBefore(tg,sp);
+  var all=document.createElement('button');all.className='copy all';all.innerHTML='Salin semua';all.title='Satu fail HTML lengkap';
+  all.onclick=function(){copy(full(c),all)};
+  var cp=document.createElement('button');cp.className='copy';cp.innerHTML=icon+'Salin';cp.setAttribute('aria-label','Salin kod tab ini');
+  cp.onclick=function(){copy(c[cur],cp)};
+  bar.appendChild(all);bar.appendChild(cp);
+  show('html');return el;
+}
+var list=document.getElementById('list');
+document.getElementById('cnt').textContent=C.length;
+document.getElementById('yr').textContent=new Date().getFullYear();
+var ORDER=['Latar Belakang','Gaya Apple','Asas','Susun atur','Navigasi','Interaktif','Form','Gambar','Galeri','Kreatif'];
+var CATS=ORDER.filter(function(k){return C.some(function(c){return c.cat===k})});
+C.forEach(function(c){if(CATS.indexOf(c.cat)<0)CATS.push(c.cat)});
+CATS.forEach(function(k){
+  var g=C.filter(function(c){return c.cat===k});
+  var sec=document.createElement('section');sec.className='sec';sec.dataset.cat=k;
+  var h=document.createElement('h2');h.className='cat';h.innerHTML=k+'<span>'+g.length+'</span>';
+  sec.appendChild(h);
+  g.forEach(function(c){sec.appendChild(build(c))});
+  list.appendChild(sec);
+});
+var cats=['Semua'].concat(CATS);
+var chips=document.getElementById('chips');
+cats.forEach(function(k,i){
+  var b=document.createElement('button');b.className='chip';b.innerHTML=k+(i?' <small>'+C.filter(function(c){return c.cat===k}).length+'</small>':'');b.setAttribute('aria-pressed',i===0);
+  b.onclick=function(){
+    chips.querySelectorAll('.chip').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+    list.querySelectorAll('.sec').forEach(function(s){s.style.display=(k==='Semua'||s.dataset.cat===k)?'':'none'});list.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+  chips.appendChild(b);
+});
+</script>
+</body>
+</html>
